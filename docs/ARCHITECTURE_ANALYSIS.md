@@ -4,6 +4,8 @@
 
 Phân tích này dựa trên toàn bộ repository tại baseline commit `9b79945` (`feat: initialize universal AI-DOS framework`). Repository có 43 file tracked, tất cả là Markdown hoặc JSON; không có source code ứng dụng, package manifest, CI workflow, CLI, schema validator hay runtime service.
 
+Sau baseline đó, Phase 1 đã bổ sung reference implementation trong `core/`, package metadata và tests trong `test/`. Các mục Current bên dưới mô tả skeleton ban đầu; phần `## 11. Phase 1 implementation` ghi nhận trạng thái hiện tại.
+
 Kết luận trong tài liệu này phân biệt rõ:
 
 - **Current:** những gì repository thực sự có hôm nay.
@@ -46,6 +48,8 @@ README.md
 | `08-qa` | 4 QA templates | Verification evidence |
 | `09-prompts` | 4 prompts | Entry points cho agent |
 | `10-state` | JSON và Markdown state | Current execution projection |
+| `core` | Contracts, state machine, validation CLI | Phase 1 reference implementation |
+| `test` | Node built-in tests và JSON fixtures | Contract/state/validation evidence |
 | Root | `README.md` | Onboarding và quick orientation |
 
 ## 4. Điểm mạnh
@@ -202,4 +206,16 @@ ai-dos/
 
 ## 10. Kết luận
 
-AI-DOS hiện có nền governance tốt và phạm vi ý tưởng đúng, nhưng chưa phải framework có contract thực thi. Rủi ro lớn nhất không phải thiếu thêm policy; là policy có thể drift, state có thể lệch và boundary project/framework chưa được formalize. Bước tiếp theo nên củng cố contract, source of truth và compatibility trước khi thêm tính năng hoặc adapter.
+Ở baseline phân tích, AI-DOS có nền governance tốt nhưng chưa phải framework có contract thực thi. Phase 1 đã xử lý phần foundation đó; các rủi ro còn lại là full-schema conformance, projections, profiles và adapter governance, được giữ cho Phase 2+ thay vì mở rộng scope hiện tại.
+
+## 11. Phase 1 implementation
+
+Phase 1 đã biến các khuyến nghị P0/P1 nền tảng thành reference implementation:
+
+- `core/contracts/`: seven record schemas, vocabulary, compatibility matrix và extension boundary;
+- `core/state/`: immutable state factory, transition table và project status derivation;
+- `core/validation/`: schema subset, placeholder, duplicate ID, dependency cycle và state alignment checks;
+- `core/validate.js`: CLI reproducible với exit code `0`/`1`;
+- `test/`: 23 Node built-in tests không network/dependency ngoài.
+
+Một quyết định refactor quan trọng trong quá trình triển khai: task record là work definition; `project.state.taskStatuses` là canonical lifecycle source of truth. Điều này loại bỏ status duplication giữa task và state. Full JSON Schema support, Markdown projection, adapter/profile registry và CI conformance thuộc Phase 2+.

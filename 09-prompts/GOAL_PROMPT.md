@@ -16,6 +16,19 @@ Start with:
 - 05-operations/MANUAL_ACTION_QUEUE.md
 - 06-roadmap/ROADMAP.md
 - all tasks in 07-tasks/
+- core/contracts/
+- core/state/
+- core/validation/
+- docs/COMPATIBILITY_MATRIX.md
+- docs/MIGRATION_GUIDE.md
+
+If canonical JSON records exist, validate the complete record set before implementation:
+
+```text
+node core/validate.js <all-canonical-record-files>
+```
+
+Do not proceed while diagnostics report placeholders, duplicate IDs, unknown dependencies, dependency cycles, or task/state ID drift. The canonical lifecycle status is `project.state.taskStatuses`; task records are work definitions.
 
 Before implementation, inspect the real current code and update the architecture snapshot. Do not assume old documentation is accurate.
 

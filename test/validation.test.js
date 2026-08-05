@@ -26,7 +26,6 @@ const task = (id, dependencies = []) => ({
   category: 'Core',
   priority: 'HIGH',
   objective: 'Create a stable contract.',
-  status: 'TODO',
   dependencies,
   acceptanceCriteria: ['Contract is machine-readable.'],
   verification: ['node --test'],
@@ -77,6 +76,67 @@ test('detects unknown dependencies and circular dependencies', () => {
   assert.equal(result.ok, false);
   assert.ok(result.diagnostics.some((diagnostic) => diagnostic.code === 'UNKNOWN_DEPENDENCY'));
   assert.ok(result.diagnostics.some((diagnostic) => diagnostic.code === 'DEPENDENCY_CYCLE'));
+});
+
+test('treats project state as the canonical lifecycle status store', () => {
+  const state = {
+    kind: 'project.state',
+    schemaVersion: '1.0',
+    id: 'STATE:PROJECT_AI_DOS',
+    projectId: 'PROJECT:AI_DOS',
+    aiDosVersion: '1.0.0',
+    status: 'NOT_STARTED',
+    currentSprintId: null,
+    currentTaskId: null,
+    taskStatuses: { 'TASK:ONE': 'TODO' },
+    waitingManualActionIds: [],
+    lastEvidenceId: null,
+    updatedAt: '2026-08-05T12:00:00.000Z',
+  };
+
+  assert.deepEqual(validateRecords([task('TASK:ONE'), state]), { ok: true, diagnostics: [] });
+});
+
+test('reports task/state ID drift instead of allowing two implicit sources of truth', () => {
+  const state = {
+    kind: 'project.state',
+    schemaVersion: '1.0',
+    id: 'STATE:PROJECT_AI_DOS',
+    projectId: 'PROJECT:AI_DOS',
+    aiDosVersion: '1.0.0',
+    status: 'NOT_STARTED',
+    currentSprintId: null,
+    currentTaskId: null,
+    taskStatuses: { 'TASK:MISSING': 'TODO' },
+    waitingManualActionIds: [],
+    lastEvidenceId: null,
+    updatedAt: '2026-08-05T12:00:00.000Z',
+  };
+
+  const result = validateRecords([task('TASK:ONE'), state]);
+  assert.ok(result.diagnostics.some(({ code }) => code === 'UNKNOWN_STATE_TASK'));
+  assert.ok(result.diagnostics.some(({ code }) => code === 'MISSING_STATE_TASK'));
+});
+
+test('reports aggregate state drift and unknown current task', () => {
+  const state = {
+    kind: 'project.state',
+    schemaVersion: '1.0',
+    id: 'STATE:PROJECT_AI_DOS',
+    projectId: 'PROJECT:AI_DOS',
+    aiDosVersion: '1.0.0',
+    status: 'COMPLETED',
+    currentSprintId: null,
+    currentTaskId: 'TASK:MISSING',
+    taskStatuses: { 'TASK:ONE': 'TODO' },
+    waitingManualActionIds: [],
+    lastEvidenceId: null,
+    updatedAt: '2026-08-05T12:00:00.000Z',
+  };
+
+  const result = validateRecords([task('TASK:ONE'), state]);
+  assert.ok(result.diagnostics.some(({ code }) => code === 'STATE_STATUS_MISMATCH'));
+  assert.ok(result.diagnostics.some(({ code }) => code === 'UNKNOWN_CURRENT_TASK'));
 });
 
 test('rejects unknown contract kinds without throwing', () => {

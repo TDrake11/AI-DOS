@@ -92,7 +92,7 @@ AI-DOS không cấp quyền mà môi trường không cấp, không thay thế C
 | 4 — Governed | Vận hành lâu dài | Compatibility, migrations, audit trail, release channels |
 | 5 — Ecosystem | Tái sử dụng quy mô lớn | Profiles, registry, conformance suite và cộng đồng |
 
-Baseline hiện tại là giữa Level 0 và Level 1. Mục tiêu dài hạn là Level 4 trước khi tối ưu cho Level 5.
+Baseline Markdown ban đầu nằm giữa Level 0 và Level 1. Sau Phase 1, AI-DOS có contract/state/validation foundation và đang tiến vào Level 2; full conformance, projection và adapter governance vẫn thuộc các phase sau. Mục tiêu dài hạn là Level 4 trước khi tối ưu cho Level 5.
 
 ## 8. Tiêu chí thành công
 

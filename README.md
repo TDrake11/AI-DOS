@@ -11,13 +11,15 @@ AI-DOS là bộ quy tắc vận hành dành cho Codex hoặc coding agent làm v
 - UI/UX Reviewer
 - Project Manager
 
-Bộ này không phụ thuộc dự án cụ thể. Với một dự án mới, chỉ cần cập nhật:
+Bộ này không phụ thuộc dự án cụ thể. Với layout legacy tối thiểu của một dự án mới, cập nhật:
 
 1. `00-project/PROJECT_INFO.md`
 2. `06-roadmap/ROADMAP.md`
 3. `07-tasks/`
 
 Sau đó dùng prompt trong `09-prompts/GOAL_PROMPT.md`.
+
+Khi bật Phase 1 Core, project cần tạo thêm canonical JSON records theo `docs/MIGRATION_GUIDE.md`; ba vị trí trên vẫn là project overlay và legacy authoring interface.
 
 ## Nguyên tắc cốt lõi
 
@@ -44,6 +46,24 @@ Sau đó dùng prompt trong `09-prompts/GOAL_PROMPT.md`.
 - `08-qa`: smoke, regression, UAT.
 - `09-prompts`: prompt dùng với `/goal`, bugfix, review, design.
 - `10-state`: trạng thái máy có thể đọc.
+
+## AI-DOS Core — Phase 1
+
+AI-DOS Core hiện cung cấp contract foundation độc lập với project:
+
+- JSON schemas và vocabulary trong `core/contracts/`;
+- canonical lifecycle state và transition model trong `core/state/`;
+- validator không dependency ngoài cho record, placeholder, duplicate ID và dependency cycle trong `core/validation/`;
+- compatibility/migration policy trong `docs/COMPATIBILITY_MATRIX.md` và `docs/MIGRATION_GUIDE.md`.
+
+Chạy kiểm tra:
+
+```text
+node --test
+node core/validate.js <record.json> [more-records.json]
+```
+
+Lifecycle status thuộc `project.state.taskStatuses`; task record chỉ mô tả work definition. Markdown hiện tại vẫn được giữ làm legacy human/agent interface trong Phase 1.
 
 ## Khởi tạo dự án mới
 

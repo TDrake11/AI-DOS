@@ -80,7 +80,7 @@
       "$id": "https://ai-dos.dev/schemas/task.schema.json",
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "schemaVersion", "id", "title", "category", "priority", "objective", "status", "dependencies", "acceptanceCriteria", "verification", "applicability"],
+      "required": ["kind", "schemaVersion", "id", "title", "category", "priority", "objective", "dependencies", "acceptanceCriteria", "verification", "applicability"],
       "properties": {
         "kind": { "const": "task" },
         "schemaVersion": { "const": "1.0" },
@@ -89,7 +89,6 @@
         "category": { "type": "string", "minLength": 1 },
         "priority": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
         "objective": { "type": "string", "minLength": 1 },
-        "status": { "enum": ["TODO", "IN_PROGRESS", "WAITING_MANUAL", "BLOCKED_DEPENDENCY", "PARTIAL", "READY_FOR_DEPLOY", "DEPLOYING", "VERIFYING_PRODUCTION", "DONE", "FAILED"] },
         "dependencies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
         "blocks": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
         "acceptanceCriteria": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },

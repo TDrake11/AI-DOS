@@ -40,7 +40,7 @@ test('contract schemas share stable record metadata', () => {
 test('work records require agent-executable planning fields', () => {
   assert.deepEqual(getSchema('task').required, [
     'kind', 'schemaVersion', 'id', 'title', 'category', 'priority',
-    'objective', 'status', 'dependencies', 'acceptanceCriteria',
+    'objective', 'dependencies', 'acceptanceCriteria',
     'verification', 'applicability',
   ]);
   assert.ok(getSchema('sprint').required.includes('entryCriteria'));

@@ -15,7 +15,7 @@ Phase 1 không xây CLI orchestration, adapter, generated Markdown projection, C
 - **Compatibility:** additive change là default; breaking change phải tăng major contract version và có migration note.
 - **Applicability:** explicit `REQUIRED`, `OPTIONAL` hoặc `NOT_APPLICABLE`; không suy luận deployment từ việc file có URL hay không.
 - **Dependencies:** chỉ task/sprint dependency mới tạo graph; validator phải phát hiện duplicate ID và cycle.
-- **State:** state lưu transition hiện tại và evidence references; task record vẫn là nguồn sự thật của task fields.
+- **State:** `project.state.taskStatuses` là nguồn sự thật duy nhất cho lifecycle; task record là work definition và không lặp status.
 
 ## Commands
 
@@ -46,10 +46,10 @@ docs/              specs, architecture and migration documentation
 | `project.profile` | Project context and capabilities | `id`, `name`, `repositoryType`, `primaryBranch`, `targetVersion` |
 | `roadmap` | Version objective and sprint references | `id`, `version`, `objective`, `sprintIds` |
 | `sprint` | Ordered task group | `id`, `name`, `taskIds`, `status` |
-| `task` | Atomic unit of work | `id`, `title`, `status`, `dependencies`, `applicability` |
+| `task` | Atomic work definition | `id`, `title`, `objective`, `dependencies`, `applicability` |
 | `manual_action` | Human-only action and retest protocol | `id`, `status`, `requiredAction`, `expectedResult` |
 | `evidence` | Verification result attached to a task | `id`, `taskId`, `checks`, `result` |
-| `project.state` | Current execution state | `projectId`, `status`, `currentTaskId`, `taskStatuses` |
+| `project.state` | Current execution state and lifecycle source of truth | `projectId`, `status`, `currentTaskId`, `taskStatuses` |
 
 ## Code style
 
@@ -78,10 +78,11 @@ docs/              specs, architecture and migration documentation
 - [ ] All seven record kinds have machine-readable schemas and registry metadata.
 - [ ] Required fields, ID format, status vocabulary and applicability vocabulary are explicit.
 - [ ] Canonical state transition rules reject invalid transitions and accept valid ones.
+- [ ] Task definitions do not duplicate lifecycle status; state/task ID alignment is validated.
 - [ ] Validator reports missing required fields, placeholders, duplicate IDs and dependency cycles.
 - [ ] Compatibility matrix and first migration guide are committed.
 - [ ] `node --test` passes without network or additional package installation.
-- [ ] Existing 43 framework files remain unchanged unless a compatibility note explicitly requires otherwise.
+- [ ] Existing project data remains untouched; framework onboarding/prompt/rule references may be updated to integrate the new core contract.
 
 ## Open questions deferred beyond Phase 1
 

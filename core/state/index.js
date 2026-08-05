@@ -1,6 +1,5 @@
 import {
   CONTRACT_SCHEMA_VERSION,
-  PROJECT_STATUSES,
   TASK_STATUSES,
 } from '../contracts/index.js';
 
@@ -58,6 +57,10 @@ function createStateId(projectId) {
 }
 
 export function createProjectState({ projectId, aiDosVersion, taskIds = [], now }) {
+  if (new Set(taskIds).size !== taskIds.length) {
+    throw new TypeError('DUPLICATE_TASK_ID: taskIds must be unique');
+  }
+
   const taskStatuses = {};
   for (const taskId of taskIds) {
     taskStatuses[taskId] = 'TODO';

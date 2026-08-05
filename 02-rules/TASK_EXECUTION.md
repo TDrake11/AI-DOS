@@ -17,6 +17,8 @@ Trạng thái hợp lệ:
 
 `TODO → IN_PROGRESS → READY_FOR_DEPLOY → DEPLOYING → VERIFYING_PRODUCTION → DONE`
 
+Lifecycle status của canonical records được lưu trong `project.state.taskStatuses`. Task record chỉ chứa work definition; không dùng một status thứ hai làm nguồn sự thật.
+
 ## Khi cần con người
 
 `IN_PROGRESS → WAITING_MANUAL`

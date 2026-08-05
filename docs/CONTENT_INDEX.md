@@ -2,7 +2,7 @@
 
 ## 1. Mục đích
 
-Đây là bản đồ nội dung của AI-DOS và là điểm bắt đầu cho agent hoặc maintainer. File này phân biệt file framework, file project overlay, file vận hành và file trạng thái. Các đường dẫn dưới đây là inventory của baseline hiện tại.
+Đây là bản đồ nội dung của AI-DOS và là điểm bắt đầu cho agent hoặc maintainer. File này phân biệt file framework, file project overlay, file vận hành, core reference implementation và file trạng thái. Inventory gồm skeleton baseline và phần Core Phase 1 đã triển khai.
 
 ## 2. Read order chuẩn
 
@@ -144,6 +144,18 @@ Prompt là interface tiện dụng cho agent; policy canonical vẫn nằm ở c
 | `PROJECT_STATE.json` | Machine-readable current project state | State projection |
 | `TASK_STATUS.md` | Human-readable task summary | State projection |
 
+### `docs` — Framework architecture and evolution
+
+| File | Vai trò |
+|---|---|
+| `AI_DOS_VISION.md` | Tầm nhìn, ranh giới và maturity model |
+| `ARCHITECTURE_ANALYSIS.md` | Current architecture, gaps và target structure |
+| `MODULE_DEPENDENCY.md` | Logical module graph và dependency rules |
+| `FRAMEWORK_ROADMAP.md` | Phase roadmap, versioning và expansion plan |
+| `PHASE1_CORE_SPEC.md` | Phase 1 contract foundation spec |
+| `COMPATIBILITY_MATRIX.md` | Reader policy và legacy mapping |
+| `MIGRATION_GUIDE.md` | Manual migration procedure |
+
 ### `core` — Phase 1 reference implementation
 
 | Path | Vai trò | Tính chất |
@@ -169,7 +181,8 @@ Tuy nhiên để contract này đúng trong thực tế, các file sau phải đ
 | Data | Hiện tại | Target |
 |---|---|---|
 | Project identity | Markdown placeholders | Canonical project profile + Markdown view |
-| Task status | Task file + `TASK_STATUS.md` | Canonical task record + generated summary |
+| Task definition | Task file | Canonical `task` record |
+| Task status | Task file + `TASK_STATUS.md` | Canonical `project.state.taskStatuses` |
 | Project state | `PROJECT_STATE.json` | Canonical state schema + views |
 | Dependency graph | Prose/table/code block | Validated graph model |
 | Policy | Markdown | Versioned policy documents + metadata |

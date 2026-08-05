@@ -7,6 +7,7 @@ import {
   deriveProjectStatus,
   transitionTask,
 } from '../core/state/index.js';
+import { TASK_STATUSES } from '../core/contracts/index.js';
 
 const NOW = '2026-08-05T12:00:00.000Z';
 
@@ -35,6 +36,15 @@ test('creates canonical state with deterministic initial values', () => {
     lastEvidenceId: null,
     updatedAt: NOW,
   });
+});
+
+test('rejects duplicate task IDs instead of silently overwriting state', () => {
+  assert.throws(() => createProjectState({
+    projectId: 'PROJECT:AI_DOS',
+    aiDosVersion: '1.0.0',
+    taskIds: ['TASK:DUPLICATE', 'TASK:DUPLICATE'],
+    now: NOW,
+  }), /DUPLICATE_TASK_ID/);
 });
 
 test('accepts a valid task transition without mutating the source state', () => {
@@ -97,6 +107,7 @@ test('derives project status from task statuses', () => {
 });
 
 test('transition table makes lifecycle branches explicit', () => {
+  assert.deepEqual(Object.keys(TASK_TRANSITIONS).sort(), [...TASK_STATUSES].sort());
   assert.deepEqual(TASK_TRANSITIONS.TODO, ['IN_PROGRESS', 'BLOCKED_DEPENDENCY']);
   assert.deepEqual(TASK_TRANSITIONS.VERIFYING_PRODUCTION, ['DONE', 'FAILED', 'WAITING_MANUAL']);
   assert.deepEqual(TASK_TRANSITIONS.DONE, []);

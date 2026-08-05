@@ -29,7 +29,7 @@ AI-DOS distinguishes:
 | `project.profile` | Supported | `00-project/PROJECT_INFO.md`, `TECH_STACK.md` | Map identity/capabilities; keep vendor details in `extensions` |
 | `roadmap` | Supported | `06-roadmap/ROADMAP.md` | Map version, scope, sprints and release criteria |
 | `sprint` | Supported | `07-tasks/**/README.md` | Map active sprint; exclude examples |
-| `task` | Supported | `07-tasks/**/SPR*.md` | Preserve stable ID, status, acceptance and dependencies |
+| `task` | Supported | `07-tasks/**/SPR*.md` | Preserve stable ID, definition, acceptance and dependencies; move lifecycle status to `project.state` |
 | `manual_action` | Supported | `05-operations/MANUAL_ACTION_QUEUE.md` | One record per human-only action; no secrets |
 | `evidence` | Supported | task/QA/operations records | Extract command, result, commit and verification timestamp |
 | `project.state` | Supported | `10-state/PROJECT_STATE.json`, `TASK_STATUS.md` | Rebuild from canonical task records |
@@ -43,6 +43,8 @@ node core/validate.js <record.json> [more-records.json]
 ```
 
 `10-state/TASK_STATUS.md` is treated as a human-readable legacy view, not an independent source of truth, once a canonical `project.state` record exists. Projection generation is intentionally deferred to Phase 2.
+
+`task` records are definitions. Their lifecycle status is deliberately not duplicated there; `project.state.taskStatuses` is the canonical status map and must contain exactly the active task IDs when the complete project record set is validated.
 
 ## 5. Breaking-change rules
 

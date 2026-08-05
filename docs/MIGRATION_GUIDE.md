@@ -41,10 +41,11 @@ Create one `task` record per active task:
 
 - preserve the existing ID where it is unique and stable;
 - copy title, category, priority, objective, acceptance criteria and verification;
-- normalize status to the Phase 1 vocabulary;
 - copy dependencies without inventing missing edges;
 - set applicability for tests, deployment and production verification;
 - keep example tasks outside the active record set.
+
+Do not copy lifecycle status into the task record. Capture it in the `project.state.taskStatuses` map in Step 6.
 
 ### Step 5 — Create Manual Action and evidence records
 
@@ -52,7 +53,7 @@ Convert each active Manual Action into one `manual_action` record. Extract verif
 
 ### Step 6 — Build canonical state
 
-Create `project.state` from the task records. Initialize each task status from its canonical task record. Set `currentTaskId` only when an agent is actively working. Keep the legacy `10-state/TASK_STATUS.md` unchanged until a later projection workflow is available.
+Create `project.state` from the task records and the legacy task statuses. The state map must contain exactly one status for every active task ID. Set `currentTaskId` only when an agent is actively working. Keep the legacy `10-state/TASK_STATUS.md` unchanged until a later projection workflow is available.
 
 ### Step 7 — Validate
 

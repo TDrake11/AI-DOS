@@ -2,6 +2,7 @@ import {
   CONTRACT_KINDS,
   getSchema,
 } from '../contracts/index.js';
+import { deriveProjectStatus } from '../state/index.js';
 
 const DEPENDENCY_KINDS = new Set(['task', 'sprint']);
 const PLACEHOLDER_PATTERN = /<[^>\r\n]+>/;
@@ -187,6 +188,50 @@ function findDependencyCycles(edges, diagnostics) {
   for (const id of edges.keys()) visit(id);
 }
 
+function validateStateTaskAlignment(records, diagnostics) {
+  const taskIds = new Set(
+    records
+      .filter((record) => record?.kind === 'task' && typeof record.id === 'string')
+      .map((record) => record.id),
+  );
+
+  records.forEach((record, index) => {
+    if (record?.kind !== 'project.state' || !isObject(record.taskStatuses)) return;
+
+    const stateTaskIds = new Set(Object.keys(record.taskStatuses));
+    const derivedStatus = deriveProjectStatus(record.taskStatuses);
+    if (record.status !== derivedStatus) {
+      addDiagnostic(diagnostics, 'STATE_STATUS_MISMATCH', `$[${index}].status`, {
+        stateId: record.id,
+        expected: derivedStatus,
+        value: record.status,
+      });
+    }
+    if (record.currentTaskId !== null && !stateTaskIds.has(record.currentTaskId)) {
+      addDiagnostic(diagnostics, 'UNKNOWN_CURRENT_TASK', `$[${index}].currentTaskId`, {
+        stateId: record.id,
+        taskId: record.currentTaskId,
+      });
+    }
+    for (const taskId of stateTaskIds) {
+      if (!taskIds.has(taskId)) {
+        addDiagnostic(diagnostics, 'UNKNOWN_STATE_TASK', `$[${index}].taskStatuses.${taskId}`, {
+          taskId,
+          stateId: record.id,
+        });
+      }
+    }
+    for (const taskId of taskIds) {
+      if (!stateTaskIds.has(taskId)) {
+        addDiagnostic(diagnostics, 'MISSING_STATE_TASK', `$[${index}].taskStatuses`, {
+          taskId,
+          stateId: record.id,
+        });
+      }
+    }
+  });
+}
+
 export function validateRecords(records) {
   if (!Array.isArray(records)) {
     return {
@@ -218,6 +263,7 @@ export function validateRecords(records) {
 
   const edges = collectDependencyEdges(records, new Set(ids.keys()), diagnostics);
   findDependencyCycles(edges, diagnostics);
+  validateStateTaskAlignment(records, diagnostics);
 
   return { ok: diagnostics.length === 0, diagnostics };
 }

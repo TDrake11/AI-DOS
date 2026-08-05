@@ -10,3 +10,5 @@ The Phase 1 canonical record format is JSON. Each record has:
 `contract-schemas.json` is the machine-readable schema registry. `vocabulary.json` is the source for shared statuses and applicability values. Consumers must reject unknown `kind` or `schemaVersion`; they must not silently reinterpret a record.
 
 The schemas intentionally do not describe every project-specific business field. Project-specific additions belong under `extensions` until a future contract version promotes them to a shared field.
+
+Task records describe work and do not own lifecycle status. `project.state.taskStatuses` is the canonical status store; this prevents task definitions and execution state from becoming two competing sources of truth.

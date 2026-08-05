@@ -6,11 +6,13 @@
 2. Kiểm tra trạng thái hiện tại thay vì dựa trên mô tả cũ.
 3. Xác định dependency, rủi ro, API, DB, UI và test bị ảnh hưởng.
 4. Tạo kế hoạch ngắn trong task log.
+5. Nếu project có canonical JSON records, chạy `node core/validate.js` trên toàn bộ record set trước khi thực thi; không chạy task khi có placeholder, duplicate ID, unknown dependency hoặc dependency cycle.
 
 ## Trong khi làm
 
 - Thay đổi nhỏ, có kiểm soát.
 - Tái sử dụng code hiện có.
+- Với AI-DOS Core, giữ lifecycle status trong `project.state.taskStatuses`; không tạo status thứ hai trong task definition.
 - Không tạo component, service hoặc helper trùng lặp.
 - Giữ backward compatibility khi có thể.
 - Mọi thay đổi DB phải có migration.
@@ -22,7 +24,7 @@
 
 1. Chạy validation theo `04-quality/TESTING_POLICY.md`.
 2. Sửa mọi lỗi liên quan.
-3. Cập nhật task status.
+3. Cập nhật `project.state.taskStatuses` và evidence; chỉ cập nhật legacy task summary khi project còn dùng view đó.
 4. Commit riêng cho task.
 5. Push.
 6. Theo dõi deploy theo `04-quality/PRODUCTION_POLICY.md`.

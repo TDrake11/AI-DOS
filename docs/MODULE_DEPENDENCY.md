@@ -24,6 +24,8 @@ Dependency ở đây là dependency về context và contract giữa các module
 | M09 | Prompt Entry Points | `09-prompts/*` | Agent invocation surfaces | M01–M08 |
 | M10 | State Projection | `10-state/*` | Current execution state | M02, M03, M06, M07, M08 |
 | M11 | Documentation | `README.md`, `docs/*` | Navigation, architecture, vision, dependency | M01–M10 |
+| M12 | Core Reference Implementation | `core/contracts/*`, `core/state/*`, `core/validation/*`, `core/validate.js` | Canonical contracts, transitions, validation | M01–M07 |
+| M13 | Core Tests | `test/*` | Executable contract/state/validation evidence | M12 |
 
 ## 3. Dependency graph hiện tại
 
@@ -62,6 +64,7 @@ Có một coupling vòng tiềm ẩn cần xử lý: `01-goal/GOAL.md` dùng đi
 6. Ghi M06: evidence, risk, manual action, release/rollback khi cần
 7. Cập nhật M10: state canonical/projection
 8. Dùng M09 làm entry point và M11 làm navigation/context handoff
+9. Core M12 validate records/state before execution; M13 proves behavior without external services
 ```
 
 ## 5. Boundary và hướng phụ thuộc bắt buộc
@@ -139,4 +142,4 @@ Core contract nằm ở đáy của mọi dependency. Profiles và policies mở
 
 ## 9. Kết luận dependency
 
-Dependency đúng của AI-DOS là dependency theo contract, không phải dependency theo thứ tự thư mục. Số thứ tự hiện tại giúp onboarding, nhưng tương lai cần manifest/graph có thể validate. Mục tiêu là để thêm một project profile hoặc adapter mà không tạo edge ngược vào core.
+Dependency đúng của AI-DOS là dependency theo contract, không phải dependency theo thứ tự thư mục. Số thứ tự hiện tại giúp onboarding, nhưng tương lai cần manifest/graph có thể validate. Mục tiêu là để thêm một project profile hoặc adapter mà không tạo edge ngược vào core. Phase 1 giữ hướng phụ thuộc một chiều: contracts → state/validation → CLI/tests; core không phụ thuộc project adapter.

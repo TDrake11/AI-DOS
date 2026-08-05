@@ -27,7 +27,7 @@
     "task": {
       "status": "SUPPORTED",
       "legacySources": ["07-tasks/**/SPR*.md"],
-      "migration": "Create one task record per active task; preserve a stable ID and normalize status/dependencies."
+      "migration": "Create one task record per active task; preserve a stable ID, definition and dependencies, then move lifecycle status to project.state."
     },
     "manual_action": {
       "status": "SUPPORTED",

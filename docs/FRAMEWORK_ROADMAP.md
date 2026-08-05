@@ -34,7 +34,7 @@ Repository đang ở `1.0.0` theo README và `10-state/PROJECT_STATE.json`, như
 - prompt entry points;
 - minimal JSON state.
 
-### Baseline limitations
+### Baseline limitations before Phase 1
 
 - chưa có schema/validator;
 - chưa có canonical state/task source;
@@ -67,7 +67,11 @@ Repository đang ở `1.0.0` theo README và `10-state/PROJECT_STATE.json`, như
 
 **Dependency:** Phase 0.
 
+**Implementation status:** Completed in the current Phase 1 implementation. The core contract, state, validation, compatibility and migration artifacts are committed and tested; the final self-review/refactor is part of this completion gate.
+
 **Exit criteria:** một project mới có thể validate context/task/state trước khi agent thực thi; phát hiện placeholder/duplicate ID/circular dependency bằng một quy trình reproducible.
+
+**Verified evidence:** `node --test` passes the Phase 1 suite; `node core/validate.js` returns `0` for valid records and `1` for invalid dependency graphs. Full projection/conformance remains Phase 2.
 
 ### Phase 2 — Agent experience and validation (đề xuất: 1.x)
 
