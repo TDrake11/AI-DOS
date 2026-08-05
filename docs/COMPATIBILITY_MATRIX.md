@@ -33,6 +33,7 @@ AI-DOS distinguishes:
 | `manual_action` | Supported | `05-operations/MANUAL_ACTION_QUEUE.md` | One record per human-only action; no secrets |
 | `evidence` | Supported | task/QA/operations records | Extract command, result, commit and verification timestamp |
 | `project.state` | Supported | `10-state/PROJECT_STATE.json`, `TASK_STATUS.md` | Rebuild from canonical task records |
+| `read_order.manifest` | Supported | README/content index and project overlay | Declare literal read order, required paths and safe generated output |
 
 ## 4. Backward compatibility
 

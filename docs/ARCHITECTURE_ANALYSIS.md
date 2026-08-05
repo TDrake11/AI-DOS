@@ -4,7 +4,7 @@
 
 Phân tích này dựa trên toàn bộ repository tại baseline commit `9b79945` (`feat: initialize universal AI-DOS framework`). Repository có 43 file tracked, tất cả là Markdown hoặc JSON; không có source code ứng dụng, package manifest, CI workflow, CLI, schema validator hay runtime service.
 
-Sau baseline đó, Phase 1 đã bổ sung reference implementation trong `core/`, package metadata và tests trong `test/`. Các mục Current bên dưới mô tả skeleton ban đầu; phần `## 11. Phase 1 implementation` ghi nhận trạng thái hiện tại.
+Sau baseline đó, Phase 1 và Phase 2 đã bổ sung reference implementation trong `core/`, package metadata và tests trong `test/`. Các mục Current bên dưới mô tả skeleton ban đầu; phần `## 11` và `## 12` ghi nhận trạng thái triển khai hiện tại.
 
 Kết luận trong tài liệu này phân biệt rõ:
 
@@ -48,7 +48,7 @@ README.md
 | `08-qa` | 4 QA templates | Verification evidence |
 | `09-prompts` | 4 prompts | Entry points cho agent |
 | `10-state` | JSON và Markdown state | Current execution projection |
-| `core` | Contracts, state machine, validation CLI | Phase 1 reference implementation |
+| `core` | Contracts, state machine, validation, manifest, conformance, projection CLIs | Phase 1/2 reference implementation |
 | `test` | Node built-in tests và JSON fixtures | Contract/state/validation evidence |
 | Root | `README.md` | Onboarding và quick orientation |
 
@@ -206,7 +206,7 @@ ai-dos/
 
 ## 10. Kết luận
 
-Ở baseline phân tích, AI-DOS có nền governance tốt nhưng chưa phải framework có contract thực thi. Phase 1 đã xử lý phần foundation đó; các rủi ro còn lại là full-schema conformance, projections, profiles và adapter governance, được giữ cho Phase 2+ thay vì mở rộng scope hiện tại.
+Ở baseline phân tích, AI-DOS có nền governance tốt nhưng chưa phải framework có contract thực thi. Phase 1 xử lý foundation; Phase 2 đã xử lý manifest, project conformance, profiles, evidence, projections và prompt drift. Adapter governance và ecosystem tooling vẫn được giữ cho Phase 3+.
 
 ## 11. Phase 1 implementation
 

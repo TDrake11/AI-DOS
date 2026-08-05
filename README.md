@@ -47,7 +47,7 @@ Khi bật Phase 1 Core, project cần tạo thêm canonical JSON records theo `d
 - `09-prompts`: prompt dùng với `/goal`, bugfix, review, design.
 - `10-state`: trạng thái máy có thể đọc.
 
-## AI-DOS Core — Phase 1
+## AI-DOS Core — Phase 1/2
 
 AI-DOS Core hiện cung cấp contract foundation độc lập với project:
 
@@ -55,6 +55,7 @@ AI-DOS Core hiện cung cấp contract foundation độc lập với project:
 - canonical lifecycle state và transition model trong `core/state/`;
 - validator không dependency ngoài cho record, placeholder, duplicate ID và dependency cycle trong `core/validation/`;
 - compatibility/migration policy trong `docs/COMPATIBILITY_MATRIX.md` và `docs/MIGRATION_GUIDE.md`.
+- manifest-first read order, project conformance, execution profiles, structured evidence và safe Markdown projections.
 
 Chạy kiểm tra:
 

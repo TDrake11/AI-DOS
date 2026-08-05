@@ -2,7 +2,7 @@
 
 ## 1. Mục đích
 
-Đây là bản đồ nội dung của AI-DOS và là điểm bắt đầu cho agent hoặc maintainer. File này phân biệt file framework, file project overlay, file vận hành, core reference implementation và file trạng thái. Inventory gồm skeleton baseline và phần Core Phase 1 đã triển khai.
+Đây là bản đồ nội dung của AI-DOS và là điểm bắt đầu cho agent hoặc maintainer. File này phân biệt file framework, file project overlay, file vận hành, core reference implementation và file trạng thái. Inventory gồm skeleton baseline, Core Phase 1 và Phase 2 agent-experience tooling đã triển khai.
 
 ## 2. Read order chuẩn
 
@@ -158,6 +158,7 @@ Prompt là interface tiện dụng cho agent; policy canonical vẫn nằm ở c
 | `PHASE1_CORE_SPEC.md` | Phase 1 contract foundation spec |
 | `PHASE2_CORE_SPEC.md` | Phase 2 manifest, conformance, profile, evidence and projection spec |
 | `PHASE2_MIGRATION_GUIDE.md` | Bootstrap path from numbered Markdown overlay to manifest-first execution |
+| `PHASE2_AUDIT.md` | Phase 2 self-audit, resolved drift and intentional limits |
 | `COMPATIBILITY_MATRIX.md` | Reader policy và legacy mapping |
 | `MIGRATION_GUIDE.md` | Manual migration procedure |
 | `handoffs/phase1-core.md` | Technical handoff for the Phase 1 implementation |
