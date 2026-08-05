@@ -43,6 +43,11 @@
       "status": "SUPPORTED",
       "legacySources": ["10-state/PROJECT_STATE.json", "10-state/TASK_STATUS.md"],
       "migration": "Create canonical state from task records; keep TASK_STATUS.md as a human-readable legacy view until projection exists."
+    },
+    "read_order.manifest": {
+      "status": "SUPPORTED",
+      "legacySources": ["README.md", "docs/CONTENT_INDEX.md"],
+      "migration": "Create a literal-path manifest that defines deterministic agent read order and a safe generated-output directory."
     }
   },
   "legacyStatusPolicy": {

@@ -1,0 +1,23 @@
+{
+  "kind": "read_order.manifest",
+  "schemaVersion": "1.0",
+  "id": "MANIFEST:AI_DOS",
+  "outputDirectory": ".ai-dos/generated",
+  "entries": [
+    {
+      "id": "project-profile",
+      "path": "records/project.profile.json",
+      "role": "canonical_record",
+      "recordKind": "project.profile",
+      "required": true,
+      "rationale": "Project context."
+    },
+    {
+      "id": "framework-readme",
+      "path": "README.md",
+      "role": "policy",
+      "required": true,
+      "rationale": "Framework orientation."
+    }
+  ]
+}

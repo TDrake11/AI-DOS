@@ -184,6 +184,37 @@
         "updatedAt": { "type": "string", "format": "date-time" },
         "extensions": { "type": "object", "additionalProperties": true }
       }
+    },
+    "read_order.manifest": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ai-dos.dev/schemas/read_order.manifest.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "schemaVersion", "id", "outputDirectory", "entries"],
+      "properties": {
+        "kind": { "const": "read_order.manifest" },
+        "schemaVersion": { "const": "1.0" },
+        "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9:_-]{2,63}$" },
+        "outputDirectory": { "type": "string", "minLength": 1 },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "path", "role", "required"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "path": { "type": "string", "minLength": 1 },
+              "role": { "enum": ["canonical_record", "policy", "prompt", "handoff", "test", "generated_output"] },
+              "recordKind": { "type": "string", "minLength": 1 },
+              "required": { "type": "boolean" },
+              "rationale": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "extensions": { "type": "object", "additionalProperties": true }
+      }
     }
   }
 }

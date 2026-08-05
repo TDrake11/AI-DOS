@@ -12,7 +12,7 @@ import {
   getSchema,
 } from '../core/contracts/index.js';
 
-test('contract registry exposes the Phase 1 record kinds', () => {
+test('contract registry exposes the canonical record kinds', () => {
   assert.deepEqual(CONTRACT_KINDS, [
     'project.profile',
     'roadmap',
@@ -21,6 +21,7 @@ test('contract registry exposes the Phase 1 record kinds', () => {
     'manual_action',
     'evidence',
     'project.state',
+    'read_order.manifest',
   ]);
   assert.equal(CONTRACT_SCHEMA_VERSION, '1.0');
 });
