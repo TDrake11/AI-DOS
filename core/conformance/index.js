@@ -53,6 +53,7 @@ function readCanonicalRecords(plan, diagnostics) {
 
 function resolveExecutionProfile(profile, diagnostics) {
   if (profile.executionProfile) return profile.executionProfile;
+  if (!profile.capabilities) return undefined;
 
   const { deployment, productionVerification } = profile.capabilities;
   const inferred = deployment === 'REQUIRED' && productionVerification === 'REQUIRED'
@@ -71,6 +72,7 @@ function resolveExecutionProfile(profile, diagnostics) {
 
 function validateProfileCapabilities(profile, executionProfile, diagnostics) {
   const capabilities = profile.capabilities;
+  if (!capabilities || !executionProfile) return;
   const allowed = {
     production_required: [['REQUIRED'], ['REQUIRED']],
     deployment_optional: [['OPTIONAL', 'NOT_APPLICABLE'], ['OPTIONAL', 'NOT_APPLICABLE']],
@@ -90,20 +92,47 @@ function validateProfileCapabilities(profile, executionProfile, diagnostics) {
 
 function requiredEvidenceKinds(task) {
   const kinds = [];
-  if (task.applicability.tests === 'REQUIRED') kinds.push('TEST');
-  if (task.applicability.deployment === 'REQUIRED') kinds.push('DEPLOY');
-  if (task.applicability.productionVerification === 'REQUIRED') kinds.push('PRODUCTION');
+  const applicability = task?.applicability ?? {};
+  if (applicability.tests === 'REQUIRED') kinds.push('TEST');
+  if (applicability.deployment === 'REQUIRED') kinds.push('DEPLOY');
+  if (applicability.productionVerification === 'REQUIRED') kinds.push('PRODUCTION');
   return kinds;
 }
 
 function findMissingEvidence(tasks, evidenceRecords, diagnostics) {
   const passedChecks = new Map();
+  const taskIds = new Set(tasks.map(({ id }) => id));
   for (const evidence of evidenceRecords) {
-    const passed = new Set(
-      evidence.checks
-        .filter(({ status }) => status === 'PASS')
-        .map(({ kind }) => kind),
-    );
+    if (!taskIds.has(evidence.taskId)) {
+      diagnostics.push(diagnostic('UNKNOWN_EVIDENCE_TASK', `$.evidence.${evidence.id}.taskId`, {
+        taskId: evidence.taskId,
+        evidenceId: evidence.id,
+      }));
+      continue;
+    }
+
+    const checks = Array.isArray(evidence.checks) ? evidence.checks : [];
+    checks.forEach((check, index) => {
+      if (!check?.kind) {
+        diagnostics.push(diagnostic(
+          'UNSTRUCTURED_EVIDENCE',
+          `$.evidence.${evidence.id}.checks[${index}].kind`,
+          { evidenceId: evidence.id },
+          'warning',
+        ));
+      }
+    });
+
+    const passed = new Set(evidence.result === 'PASS'
+      ? checks.filter((check) => check?.status === 'PASS' && typeof check.kind === 'string')
+        .map((check) => check.kind)
+      : []);
+    if (evidence.result !== 'PASS' && checks.some((check) => check?.status === 'PASS')) {
+      diagnostics.push(diagnostic('EVIDENCE_RESULT_MISMATCH', `$.evidence.${evidence.id}.result`, {
+        evidenceId: evidence.id,
+        result: evidence.result,
+      }));
+    }
     passedChecks.set(evidence.taskId, new Set([...(passedChecks.get(evidence.taskId) ?? []), ...passed]));
   }
 
@@ -146,15 +175,17 @@ export function conformProject({ manifestPath, projectRoot = dirname(manifestPat
   const validation = validateRecords(records);
   diagnostics.push(...validation.diagnostics);
 
-  const profiles = records.filter(({ kind }) => kind === 'project.profile');
-  const states = records.filter(({ kind }) => kind === 'project.state');
-  const tasks = records.filter(({ kind }) => kind === 'task');
-  const evidence = records.filter(({ kind }) => kind === 'evidence');
+  const profiles = records.filter((record) => record?.kind === 'project.profile');
+  const states = records.filter((record) => record?.kind === 'project.state');
+  const tasks = records.filter((record) => record?.kind === 'task');
+  const evidence = records.filter((record) => record?.kind === 'evidence');
   const profile = profiles[0];
   const state = states[0];
 
   if (profiles.length === 0) diagnostics.push(diagnostic('MISSING_PROJECT_PROFILE', '$.records'));
   if (states.length === 0) diagnostics.push(diagnostic('MISSING_PROJECT_STATE', '$.records'));
+  if (profiles.length > 1) diagnostics.push(diagnostic('DUPLICATE_PROJECT_PROFILE', '$.records'));
+  if (states.length > 1) diagnostics.push(diagnostic('DUPLICATE_PROJECT_STATE', '$.records'));
 
   let executionProfile;
   if (profile) {
@@ -170,13 +201,17 @@ export function conformProject({ manifestPath, projectRoot = dirname(manifestPat
   }
 
   const missingEvidenceTaskIds = findMissingEvidence(tasks, evidence, diagnostics);
-  const taskStatuses = state?.taskStatuses ?? {};
+  const taskStatuses = state?.taskStatuses && typeof state.taskStatuses === 'object'
+    ? state.taskStatuses
+    : {};
   const activeTaskIds = tasks
     .map(({ id }) => id)
-    .filter((id) => ACTIVE_STATUSES.has(taskStatuses[id]));
+    .filter((id) => ACTIVE_STATUSES.has(taskStatuses[id]))
+    .sort();
   const blockedTaskIds = tasks
     .map(({ id }) => id)
-    .filter((id) => BLOCKED_STATUSES.has(taskStatuses[id]));
+    .filter((id) => BLOCKED_STATUSES.has(taskStatuses[id]))
+    .sort();
 
   const summary = {
     executionProfile,

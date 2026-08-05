@@ -1,5 +1,5 @@
 {
-  "frameworkVersion": "1.0.0",
+  "frameworkVersion": "1.1.0",
   "contractVersion": "1.0",
   "readerPolicy": {
     "sameMajor": "ACCEPT",

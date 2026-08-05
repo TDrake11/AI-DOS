@@ -148,6 +148,20 @@ test('rejects unknown contract kinds without throwing', () => {
   });
 });
 
+test('keeps Phase 1 evidence records valid when Phase 2 check kind is absent', () => {
+  const result = validateRecord({
+    kind: 'evidence',
+    schemaVersion: '1.0',
+    id: 'EVIDENCE:LEGACY',
+    taskId: 'TASK:LEGACY',
+    checks: [{ name: 'legacy test', status: 'PASS', command: 'node --test' }],
+    result: 'PASS',
+    recordedAt: '2026-08-05T12:00:00.000Z',
+  });
+
+  assert.deepEqual(result, { ok: true, diagnostics: [] });
+});
+
 test('CLI validates JSON records with a reproducible exit code', () => {
   const valid = spawnSync(process.execPath, [
     'core/validate.js',

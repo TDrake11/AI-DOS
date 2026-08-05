@@ -1,6 +1,6 @@
 # Universal AI Development Operating System (AI-DOS)
 
-Phiên bản: `1.0.0`
+Phiên bản: `1.1.0`
 
 AI-DOS là bộ quy tắc vận hành dành cho Codex hoặc coding agent làm việc như một nhóm gồm:
 

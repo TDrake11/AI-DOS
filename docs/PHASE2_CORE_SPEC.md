@@ -137,14 +137,14 @@ Expected input errors return structured diagnostics. Filesystem failures are exp
 
 ## Phase 2 success criteria
 
-- [ ] Agent can obtain one deterministic read plan from a manifest.
-- [ ] Conformance CLI validates manifest, context/task/state records, dependency graph and applicability without network.
-- [ ] Missing required input, duplicate entry, path escape and task/evidence inconsistency fail with stable diagnostics.
-- [ ] Generated Markdown summaries are deterministic, readable and safe from legacy overwrite.
-- [ ] Profiles explicitly distinguish production required, deployment optional and not applicable.
-- [ ] Evidence has structured check kinds/status/commands and coverage is verifiable.
-- [ ] Goal prompt is a thin orchestrator referencing canonical policy and commands.
-- [ ] Full tests pass and each module has its own review/commit/push evidence.
+- [x] Agent can obtain one deterministic read plan from a manifest.
+- [x] Conformance CLI validates manifest, context/task/state records, dependency graph and applicability without network.
+- [x] Missing required input, duplicate entry, path escape and task/evidence inconsistency fail with stable diagnostics.
+- [x] Generated Markdown summaries are deterministic, readable and safe from legacy overwrite.
+- [x] Profiles explicitly distinguish production required, deployment optional and not applicable.
+- [x] Evidence has structured check kinds/status/commands and coverage is verifiable; legacy Phase 1 evidence remains readable and is warned/blocked when required coverage cannot be derived.
+- [x] Goal prompt is a thin orchestrator referencing canonical policy and commands.
+- [x] Full tests pass and each module has its own review/commit/push evidence.
 
 ## Deferred to Phase 3+
 

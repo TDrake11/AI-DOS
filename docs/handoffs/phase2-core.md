@@ -10,6 +10,7 @@
 - Explicit execution profiles and structured evidence check kinds.
 - Manifest-first thin goal/review/bugfix prompts and Phase 2 migration guide.
 - Profile-aware execution rules, Definition of Done and task template.
+- Framework release metadata `1.1.0` with backward-compatible contract schema `1.0`.
 
 ## Read this next
 
@@ -39,6 +40,7 @@ writer rejects legacy `00-*` through `10-*` roots and paths outside the project.
 - Projection module: `946b4a8` — `node --test` 37 passing at that slice.
 - Prompt/docs integration: `de35dfe` — `node --test` 40 passing at that slice.
 - Self-review policy and path-safety refactor: `201864e` — `node --test` 41 passing.
+- Completion-audit hardening and version alignment: follow-up — `node --test` 45 passing.
 
 All commits were pushed to `origin/main`. The final verification must rerun the
 full suite and confirm a clean branch before handoff.

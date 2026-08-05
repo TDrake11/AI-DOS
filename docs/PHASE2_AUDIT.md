@@ -21,7 +21,7 @@ deployment providers, browser tools, or ecosystem governance are complete.
 | Legacy safety | PASS | Writer rejects outside paths, legacy roots and unsafe symlinks |
 | Prompt drift | PASS | Goal/review/bugfix prompts delegate to manifest, rules and tools |
 | Rule/template drift | PASS | Execution rules, DoD and task template are profile-aware |
-| Verification | PASS | `node --test`: 41 passing; syntax and diff checks pass |
+| Verification | PASS | `node --test`: 45 passing; syntax and diff checks pass |
 
 ## Decisions retained after review
 
@@ -50,6 +50,11 @@ deployment providers, browser tools, or ecosystem governance are complete.
   are now checked.
 - Compatibility text still said projection was deferred; it now documents the
   generated-only Phase 2 writer.
+- Evidence `kind` was initially made required in the shared `1.0` schema; it is
+  now optional for Phase 1 compatibility while conformance requires structured
+  kinds to satisfy applicable Phase 2 coverage.
+- Framework release metadata was still `1.0.0` after additive Phase 2 work; it
+  is now aligned at `1.1.0` while preserving contract schema version `1.0`.
 
 ## Remaining intentional limits
 

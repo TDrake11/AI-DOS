@@ -6,7 +6,7 @@ The machine-readable source for this matrix is [`core/contracts/compatibility.js
 
 AI-DOS distinguishes:
 
-- **Framework version:** `1.0.0`, the release of core policies/runtime.
+- **Framework version:** `1.1.0`, the Phase 2 release of core policies/runtime.
 - **Contract version:** `1.0`, the version of record shapes and vocabulary.
 - **Project target version:** the application version being developed; it does not control AI-DOS compatibility.
 
@@ -46,6 +46,11 @@ node core/validate.js <record.json> [more-records.json]
 `10-state/TASK_STATUS.md` is treated as a human-readable legacy view, not an independent source of truth, once a canonical `project.state` record exists. Phase 2 projection generation writes only to the configured generated output directory and never overwrites `10-state`.
 
 `task` records are definitions. Their lifecycle status is deliberately not duplicated there; `project.state.taskStatuses` is the canonical status map and must contain exactly the active task IDs when the complete project record set is validated.
+
+Phase 2 evidence check `kind`, `artifact`, and `reference` fields are additive
+and optional at the shared `1.0` record-schema boundary. New conformance-ready
+projects should provide `kind`; without it, a required evidence check cannot
+be credited and conformance reports the missing coverage.
 
 ## 5. Breaking-change rules
 

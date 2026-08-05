@@ -21,7 +21,7 @@ Không dùng `target_version` để quyết định compatibility của framewor
 
 ## 3. Baseline hiện tại
 
-Repository đang ở `1.0.0` theo README và `10-state/PROJECT_STATE.json`, nhưng nội dung phù hợp hơn với **initial skeleton / Level 0–1** trong maturity model. Để không gây hiểu nhầm, một release tương lai cần định nghĩa rõ `1.0.0` là contract baseline sau khi có validation, hoặc giữ nguyên version và phát hành một compatibility note.
+Repository đã chuyển từ framework baseline `1.0.0` sang Phase 2 reference release `1.1.0`. Contract schema vẫn là `1.0` vì các Phase 2 fields/modules mới đều additive; framework version và project target version tiếp tục là hai khái niệm độc lập.
 
 ### Baseline capabilities
 
@@ -92,7 +92,7 @@ Repository đang ở `1.0.0` theo README và `10-state/PROJECT_STATE.json`, như
 
 **Exit criteria:** agent mới có thể biết phải đọc gì, task nào active, task nào blocked và evidence nào còn thiếu mà không suy luận từ nhiều file mâu thuẫn.
 
-**Verified evidence:** `node --test` passes the Phase 1/2 suite; `core/conformance.js` returns `0` for a conforming manifest and `1` for missing evidence/profile contradictions; `core/project.js` generates deterministic summaries under `.ai-dos/generated` and rejects legacy/outside output paths. Full verification is recorded in `docs/handoffs/phase2-core.md`.
+**Verified evidence:** `node --test` passes the Phase 1/2 suite (45 tests); `core/conformance.js` returns `0` for a conforming manifest and `1` for missing evidence/profile contradictions; `core/project.js` generates deterministic summaries under `.ai-dos/generated` and rejects legacy/outside output paths. Full verification is recorded in `docs/handoffs/phase2-core.md`.
 
 ### Phase 3 — Extension architecture (đề xuất: 1.x/2.x)
 

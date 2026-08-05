@@ -165,6 +165,12 @@ test('projection CLI conforms first and writes into the manifest project root', 
     ], { encoding: 'utf8' });
     assert.equal(result.status, 0, result.stderr || result.stdout);
     assert.ok(existsSync(join(root, '.ai-dos/generated/PROJECT_SUMMARY.md')));
+
+    const mismatch = spawnSync(process.execPath, [
+      'core/project.js', '--manifest', join(root, 'manifest.json'), '--out', '.ai-dos/other',
+    ], { encoding: 'utf8' });
+    assert.equal(mismatch.status, 1);
+    assert.ok(JSON.parse(mismatch.stdout).diagnostics.some(({ code }) => code === 'OUTPUT_DIRECTORY_MISMATCH'));
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

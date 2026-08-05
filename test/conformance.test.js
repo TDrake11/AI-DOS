@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -66,7 +66,14 @@ function createRecords({ includeEvidence = true, profileOverrides = {} } = {}) {
       id: 'EVIDENCE:CONFORMANCE',
       taskId: 'TASK:CONFORMANCE',
       checks: [
-        { kind: 'TEST', name: 'tests', command: 'node --test', status: 'PASS' },
+        {
+          kind: 'TEST',
+          name: 'tests',
+          command: 'node --test',
+          artifact: 'test-results.xml',
+          reference: 'run:conformance-tests',
+          status: 'PASS',
+        },
         { kind: 'DEPLOY', name: 'deployment', command: 'deploy fixture', status: 'PASS' },
         { kind: 'PRODUCTION', name: 'production', command: 'verify fixture', status: 'PASS' },
       ],
@@ -90,10 +97,9 @@ function writeProject(records) {
   }));
   entries.push({ id: 'readme', path: 'README.md', role: 'policy', required: true });
 
-  for (const record of records) {
-    const entry = entries.find(({ recordKind }) => recordKind === record.kind);
-    writeFileSync(join(root, entry.path), JSON.stringify(record, null, 2));
-  }
+  records.forEach((record, index) => {
+    writeFileSync(join(root, entries[index].path), JSON.stringify(record, null, 2));
+  });
   writeFileSync(join(root, 'README.md'), '# Conformance fixture\n');
   writeFileSync(join(root, 'manifest.json'), JSON.stringify({
     kind: 'read_order.manifest',
@@ -175,5 +181,72 @@ test('conformance CLI exposes stable success and usage exit codes', () => {
     assert.equal(valid.status, 0);
     assert.equal(JSON.parse(valid.stdout).ok, true);
     assert.equal(usage.status, 2);
+  });
+});
+
+test('conformance returns diagnostics instead of throwing on malformed canonical records', () => {
+  const project = writeProject(createRecords());
+  try {
+    const manifest = JSON.parse(readFileSync(project.manifestPath, 'utf8'));
+    manifest.entries.push({
+      id: 'malformed-record',
+      path: 'records/malformed.json',
+      role: 'canonical_record',
+      recordKind: 'task',
+      required: true,
+    });
+    writeFileSync(project.manifestPath, JSON.stringify(manifest));
+    writeFileSync(join(project.root, 'records/malformed.json'), 'null');
+
+    const result = conformProject({ manifestPath: project.manifestPath });
+
+    assert.equal(result.ok, false);
+    assert.ok(result.diagnostics.some(({ code }) => code === 'TYPE_VALUE'));
+  } finally {
+    rmSync(project.root, { recursive: true, force: true });
+  }
+});
+
+test('conformance does not count PASS checks inside failed evidence records', () => {
+  const records = createRecords();
+  records.at(-1).result = 'FAIL';
+
+  withProject(records, ({ manifestPath }) => {
+    const result = conformProject({ manifestPath });
+
+    assert.equal(result.ok, false);
+    assert.ok(result.summary.missingEvidenceTaskIds.includes('TASK:CONFORMANCE'));
+    assert.ok(result.diagnostics.some(({ code }) => code === 'MISSING_REQUIRED_EVIDENCE'));
+  });
+});
+
+test('conformance warns on legacy unstructured evidence and still requires typed coverage', () => {
+  const records = createRecords();
+  delete records.at(-1).checks[0].kind;
+
+  withProject(records, ({ manifestPath }) => {
+    const result = conformProject({ manifestPath });
+
+    assert.equal(result.ok, false);
+    assert.ok(result.diagnostics.some(({ code, severity }) => (
+      code === 'UNSTRUCTURED_EVIDENCE' && severity === 'warning'
+    )));
+    assert.ok(result.summary.missingEvidenceTaskIds.includes('TASK:CONFORMANCE'));
+  });
+});
+
+test('conformance rejects multiple project profiles explicitly', () => {
+  const records = createRecords();
+  records.splice(1, 0, {
+    ...records[0],
+    id: 'PROJECT:SECOND',
+    name: 'Second profile',
+  });
+
+  withProject(records, ({ manifestPath }) => {
+    const result = conformProject({ manifestPath });
+
+    assert.equal(result.ok, false);
+    assert.ok(result.diagnostics.some(({ code }) => code === 'DUPLICATE_PROJECT_PROFILE'));
   });
 });

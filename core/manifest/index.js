@@ -6,7 +6,7 @@ import { validateRecord } from '../validation/index.js';
 const LEGACY_ROOTS = new Set([
   '00-project', '01-goal', '02-rules', '03-development', '04-quality',
   '05-operations', '06-roadmap', '07-tasks', '08-qa', '09-prompts', '10-state',
-]);
+].map((name) => name.toLowerCase()));
 
 function diagnostic(code, path, details = {}, severity = 'error') {
   return { code, path, severity, ...details };
@@ -22,7 +22,7 @@ function isOutsideRoot(root, target) {
 
 function isLegacyRoot(root, target) {
   const relativePath = relative(root, target);
-  return LEGACY_ROOTS.has(relativePath.split(/[\\/]/)[0]);
+  return LEGACY_ROOTS.has(relativePath.split(/[\\/]/)[0].toLowerCase());
 }
 
 export function isSafeGeneratedPath(projectRoot, outputPath) {

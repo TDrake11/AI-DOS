@@ -96,7 +96,7 @@ test('rejects absolute paths and duplicate normalized paths', () => {
 });
 
 test('rejects unsafe generated directories declared by the manifest', () => {
-  for (const outputDirectory of ['../outside', '10-state']) {
+  for (const outputDirectory of ['../outside', '10-state', '10-STATE']) {
     const result = buildReadPlan({ ...manifest, outputDirectory }, fixtureRoot);
 
     assert.equal(result.ok, false);

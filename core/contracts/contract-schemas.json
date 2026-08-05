@@ -146,11 +146,13 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["kind", "name", "status"],
+            "required": ["name", "status"],
             "properties": {
               "kind": { "enum": ["TEST", "BUILD", "LINT", "DEPLOY", "PRODUCTION", "MANUAL", "OTHER"] },
               "name": { "type": "string", "minLength": 1 },
               "command": { "type": "string" },
+              "artifact": { "type": "string", "minLength": 1 },
+              "reference": { "type": "string", "minLength": 1 },
               "status": { "enum": ["PASS", "FAIL", "SKIPPED", "NOT_APPLICABLE", "BLOCKED"] }
             }
           }
