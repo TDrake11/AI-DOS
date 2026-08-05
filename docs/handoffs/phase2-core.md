@@ -40,7 +40,7 @@ writer rejects legacy `00-*` through `10-*` roots and paths outside the project.
 - Projection module: `946b4a8` — `node --test` 37 passing at that slice.
 - Prompt/docs integration: `de35dfe` — `node --test` 40 passing at that slice.
 - Self-review policy and path-safety refactor: `201864e` — `node --test` 41 passing.
-- Completion-audit hardening and version alignment: follow-up — `node --test` 45 passing.
+- Completion-audit hardening and version alignment: `28b13e3` — `node --test` 47 passing.
 
 All commits were pushed to `origin/main`. The final verification must rerun the
 full suite and confirm a clean branch before handoff.

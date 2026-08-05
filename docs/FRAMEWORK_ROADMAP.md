@@ -92,7 +92,7 @@ Repository đã chuyển từ framework baseline `1.0.0` sang Phase 2 reference 
 
 **Exit criteria:** agent mới có thể biết phải đọc gì, task nào active, task nào blocked và evidence nào còn thiếu mà không suy luận từ nhiều file mâu thuẫn.
 
-**Verified evidence:** `node --test` passes the Phase 1/2 suite (45 tests); `core/conformance.js` returns `0` for a conforming manifest and `1` for missing evidence/profile contradictions; `core/project.js` generates deterministic summaries under `.ai-dos/generated` and rejects legacy/outside output paths. Full verification is recorded in `docs/handoffs/phase2-core.md`.
+**Verified evidence:** `node --test` passes the Phase 1/2 suite (47 tests); `core/conformance.js` returns `0` for a conforming manifest and `1` for missing evidence/profile contradictions; `core/project.js` generates deterministic summaries under `.ai-dos/generated` and rejects legacy/outside output paths. Full verification is recorded in `docs/handoffs/phase2-core.md`.
 
 ### Phase 3 — Extension architecture (đề xuất: 1.x/2.x)
 

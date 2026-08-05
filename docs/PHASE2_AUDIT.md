@@ -21,7 +21,7 @@ deployment providers, browser tools, or ecosystem governance are complete.
 | Legacy safety | PASS | Writer rejects outside paths, legacy roots and unsafe symlinks |
 | Prompt drift | PASS | Goal/review/bugfix prompts delegate to manifest, rules and tools |
 | Rule/template drift | PASS | Execution rules, DoD and task template are profile-aware |
-| Verification | PASS | `node --test`: 45 passing; syntax and diff checks pass |
+| Verification | PASS | `node --test`: 47 passing; syntax and diff checks pass |
 
 ## Decisions retained after review
 

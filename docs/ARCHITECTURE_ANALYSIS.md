@@ -98,7 +98,7 @@ Không có cơ chế phát hiện placeholder còn sót, link sai, task ID trùn
 
 ### 5.6 Versioning chưa thành contract
 
-Có `1.0.0` ở README và JSON, nhưng chưa có SemVer policy, compatibility matrix, migration guide, deprecation lifecycle hoặc distinction giữa framework version và project target version.
+Phase 2 đã chuẩn hóa framework version `1.1.0`, contract version `1.0`, SemVer minor policy, compatibility matrix, migration guide và distinction giữa framework version với project target version. Deprecation lifecycle và adapter governance vẫn thuộc Phase 3+.
 
 ### 5.7 Ví dụ có thể bị hiểu là workload thật
 
