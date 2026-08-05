@@ -71,11 +71,11 @@ Repository đang ở `1.0.0` theo README và `10-state/PROJECT_STATE.json`, như
 
 **Exit criteria:** một project mới có thể validate context/task/state trước khi agent thực thi; phát hiện placeholder/duplicate ID/circular dependency bằng một quy trình reproducible.
 
-**Verified evidence:** `node --test` passes the Phase 1 suite, including a complete project/task/state fixture; `node core/validate.js` returns `0` for valid records and `1` for invalid dependency graphs. Full projection/conformance remains Phase 2.
+**Verified evidence:** `node --test` passes the Phase 1 contract/state/validation tests, including a complete project/task/state fixture; `node core/validate.js` returns `0` for valid records and `1` for invalid dependency graphs. Phase 2 consumes this foundation for project-level conformance and projections.
 
 ### Phase 2 — Agent experience and validation (đề xuất: 1.x)
 
-**Mục tiêu:** giảm context ambiguity và policy drift.
+**Mục tiêu:** giảm context ambiguity và policy drift bằng manifest-first execution.
 
 **Phạm vi:**
 
@@ -88,7 +88,11 @@ Repository đang ở `1.0.0` theo README và `10-state/PROJECT_STATE.json`, như
 
 **Dependency:** Phase 1.
 
+**Implementation status:** Completed in the Phase 2 reference implementation. The manifest, conformance boundary, profile/evidence checks, safe projections, thin prompts and migration guidance are implemented and pushed in focused commits.
+
 **Exit criteria:** agent mới có thể biết phải đọc gì, task nào active, task nào blocked và evidence nào còn thiếu mà không suy luận từ nhiều file mâu thuẫn.
+
+**Verified evidence:** `node --test` passes the Phase 1/2 suite; `core/conformance.js` returns `0` for a conforming manifest and `1` for missing evidence/profile contradictions; `core/project.js` generates deterministic summaries under `.ai-dos/generated` and rejects legacy/outside output paths. Full verification is recorded in `docs/handoffs/phase2-core.md`.
 
 ### Phase 3 — Extension architecture (đề xuất: 1.x/2.x)
 

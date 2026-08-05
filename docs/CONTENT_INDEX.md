@@ -12,22 +12,25 @@
 2. `docs/AI_DOS_VISION.md`
 3. `docs/ARCHITECTURE_ANALYSIS.md`
 4. `docs/MODULE_DEPENDENCY.md`
-5. `00-project/PROJECT_INFO.md`
-6. `00-project/ARCHITECTURE.md`
-7. `00-project/TECH_STACK.md`
+5. `.ai-dos/manifest.json` (nếu project đã migrate)
+6. `docs/PHASE2_MIGRATION_GUIDE.md` (nếu project chưa có manifest)
+7. `00-project/PROJECT_INFO.md`
+8. `00-project/ARCHITECTURE.md`
+9. `00-project/TECH_STACK.md`
 
 ### Execution một goal
 
-1. `01-goal/GOAL.md`
-2. Toàn bộ `02-rules/`
-3. Policy liên quan trong `03-development/`
-4. Toàn bộ `04-quality/`
-5. `05-operations/MANUAL_ACTION_QUEUE.md`
-6. `06-roadmap/ROADMAP.md`
-7. Task và sprint liên quan trong `07-tasks/`
-8. QA liên quan trong `08-qa/`
-9. `10-state/PROJECT_STATE.json` và `10-state/TASK_STATUS.md`
-10. Entry point cần dùng trong `09-prompts/`
+1. Manifest entry order (nếu có), bắt đầu bằng `node core/conformance.js`
+2. `01-goal/GOAL.md`
+3. Toàn bộ `02-rules/`
+4. Policy liên quan trong `03-development/`
+5. Toàn bộ `04-quality/`
+6. `05-operations/MANUAL_ACTION_QUEUE.md`
+7. `06-roadmap/ROADMAP.md`
+8. Task và sprint liên quan trong `07-tasks/`
+9. QA liên quan trong `08-qa/`
+10. `10-state/PROJECT_STATE.json` và `10-state/TASK_STATUS.md` nếu là legacy overlay
+11. Entry point cần dùng trong `09-prompts/`
 
 Read order chỉ là context order; nó không thay thế việc agent phải inspect source code thật của project.
 
@@ -130,7 +133,7 @@ Policies được chọn theo task category. Không phải project nào cũng á
 
 | File | Vai trò |
 |---|---|
-| `GOAL_PROMPT.md` | Full goal execution entry point |
+| `GOAL_PROMPT.md` | Thin manifest-first goal execution entry point |
 | `BUGFIX_PROMPT.md` | Root-cause bugfix entry point |
 | `DESIGN_PROMPT_TEMPLATE.md` | UI design prompt template |
 | `REVIEW_PROMPT.md` | Diff/task review entry point |
@@ -153,11 +156,14 @@ Prompt là interface tiện dụng cho agent; policy canonical vẫn nằm ở c
 | `MODULE_DEPENDENCY.md` | Logical module graph và dependency rules |
 | `FRAMEWORK_ROADMAP.md` | Phase roadmap, versioning và expansion plan |
 | `PHASE1_CORE_SPEC.md` | Phase 1 contract foundation spec |
+| `PHASE2_CORE_SPEC.md` | Phase 2 manifest, conformance, profile, evidence and projection spec |
+| `PHASE2_MIGRATION_GUIDE.md` | Bootstrap path from numbered Markdown overlay to manifest-first execution |
 | `COMPATIBILITY_MATRIX.md` | Reader policy và legacy mapping |
 | `MIGRATION_GUIDE.md` | Manual migration procedure |
 | `handoffs/phase1-core.md` | Technical handoff for the Phase 1 implementation |
+| `handoffs/phase2-core.md` | Technical handoff for the Phase 2 implementation |
 
-### `core` — Phase 1 reference implementation
+### `core` — Phase 1/2 reference implementation
 
 | Path | Vai trò | Tính chất |
 |---|---|---|
@@ -165,7 +171,12 @@ Prompt là interface tiện dụng cho agent; policy canonical vẫn nằm ở c
 | `core/state/` | Pure state factory và transition model | Core behavior |
 | `core/validation/` | Schema subset, placeholder và graph checks | Core behavior |
 | `core/validate.js` | Reproducible JSON validation entry point | CLI boundary |
-| `test/` | Node built-in contract/state/validation tests | Conformance evidence |
+| `core/manifest/` | Manifest loader and deterministic safe read plan | Agent context boundary |
+| `core/conformance/` | Project-level record/profile/evidence conformance | Quality boundary |
+| `core/projection/` | Pure Markdown renderers and safe writer | Generated view boundary |
+| `core/conformance.js` | Conformance CLI with stable exit codes | CLI boundary |
+| `core/project.js` | Conformance-first projection CLI | CLI boundary |
+| `test/` | Node built-in contract/state/validation/conformance/projection tests | Conformance evidence |
 
 ## 4. Project replacement contract
 
@@ -176,6 +187,8 @@ Mục tiêu user-facing là project mới có thể thay:
 - active task set trong `07-tasks/`.
 
 Tuy nhiên để contract này đúng trong thực tế, các file sau phải được khởi tạo/điền theo project: `00-project/ARCHITECTURE.md`, `00-project/TECH_STACK.md`, operations records, QA records và `10-state/*`. Đây là gap hiện tại cần giải quyết bằng profile/bootstrap contract, không nên che giấu bằng việc nói chỉ có ba vị trí thay đổi.
+
+Sau Phase 2, project nên expose một `.ai-dos/manifest.json` trỏ tới canonical records và policy entries. Ba nhóm Markdown trên là bootstrap/legacy overlay; manifest và canonical JSON là execution source of truth khi đã migrate.
 
 ## 5. Source of truth hiện tại và target
 
@@ -188,6 +201,8 @@ Tuy nhiên để contract này đúng trong thực tế, các file sau phải đ
 | Dependency graph | Prose/table/code block | Validated graph model |
 | Policy | Markdown | Versioned policy documents + metadata |
 | Prompt | Full duplicated instructions | Thin prompt referencing policy/index |
+| Read order | Implicit numbered folders | Literal-path `read_order.manifest` |
+| Evidence | Prose/checklist | Structured evidence checks |
 
 ## 6. Ownership và update trigger
 
@@ -204,3 +219,5 @@ Phase 1 design and compatibility references:
 - `docs/PHASE1_CORE_SPEC.md`
 - `docs/COMPATIBILITY_MATRIX.md`
 - `docs/MIGRATION_GUIDE.md`
+- `docs/PHASE2_CORE_SPEC.md`
+- `docs/PHASE2_MIGRATION_GUIDE.md`

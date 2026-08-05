@@ -1,13 +1,17 @@
 # Review Prompt
 
 ```text
-Review this task implementation against:
-- task acceptance criteria,
-- Definition of Done,
-- security rules,
-- API/database rules,
-- UI/UX rules,
-- production policy.
+Review the implementation against the active task contract, acceptance
+criteria, Definition of Done, applicable rules, execution profile and evidence.
 
-Inspect the diff and current code. Identify correctness, authorization, data integrity, regression, performance, accessibility and maintainability issues. Fix actionable issues, run tests, update evidence, commit, deploy and production-test when required.
+Read the canonical manifest and run conformance before reviewing the diff:
+
+node core/conformance.js --manifest .ai-dos/manifest.json
+
+Inspect correctness, security, authorization, data integrity, regression risk,
+performance, accessibility and maintainability. Identify only actionable
+findings, fix approved issues, rerun relevant checks, update structured evidence
+and canonical state, and leave generated Markdown as a projection of canonical data.
+If human-only access is required, record a precise Manual Action and continue
+independent review work.
 ```

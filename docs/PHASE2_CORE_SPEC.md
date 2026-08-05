@@ -6,6 +6,10 @@ Hoàn thiện lớp agent experience của AI-DOS để một agent mới có th
 
 Phase 2 mở rộng Phase 1 contracts nhưng không xây vendor adapter, CI integration, browser tool, deployment provider hay registry ecosystem.
 
+The recommended project entry point is `.ai-dos/manifest.json`. The loader
+also accepts an explicit manifest path so repositories can migrate without a
+directory rewrite; prompts use the recommended path for new projects.
+
 ## Assumptions
 
 - Node.js 20+ và standard library là runtime reference.

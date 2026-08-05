@@ -63,7 +63,14 @@ node --test
 node core/validate.js <record.json> [more-records.json]
 ```
 
-Lifecycle status thuộc `project.state.taskStatuses`; task record chỉ mô tả work definition. Markdown hiện tại vẫn được giữ làm legacy human/agent interface trong Phase 1.
+Với project đã migrate Phase 2, dùng manifest-first validation và generated views:
+
+```text
+node core/conformance.js --manifest .ai-dos/manifest.json
+node core/project.js --manifest .ai-dos/manifest.json --out .ai-dos/generated
+```
+
+Lifecycle status thuộc `project.state.taskStatuses`; task record chỉ mô tả work definition. Numbered Markdown folders vẫn là legacy human/agent interface; sau Phase 2, manifest và canonical JSON là source of truth, còn Markdown generated là projection.
 
 ## Khởi tạo dự án mới
 

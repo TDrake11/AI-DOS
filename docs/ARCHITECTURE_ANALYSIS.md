@@ -218,4 +218,17 @@ Phase 1 đã biến các khuyến nghị P0/P1 nền tảng thành reference imp
 - `core/validate.js`: CLI reproducible với exit code `0`/`1`;
 - `test/`: 23 Node built-in tests không network/dependency ngoài.
 
-Một quyết định refactor quan trọng trong quá trình triển khai: task record là work definition; `project.state.taskStatuses` là canonical lifecycle source of truth. Điều này loại bỏ status duplication giữa task và state. Full JSON Schema support, Markdown projection, adapter/profile registry và CI conformance thuộc Phase 2+.
+Một quyết định refactor quan trọng trong quá trình triển khai: task record là work definition; `project.state.taskStatuses` là canonical lifecycle source of truth. Điều này loại bỏ status duplication giữa task và state. Adapter registry và CI conformance thuộc Phase 3+.
+
+## 12. Phase 2 implementation
+
+Phase 2 đã chuyển các rủi ro agent-experience chính thành boundary có thể kiểm chứng:
+
+- `read_order.manifest` khai báo literal paths, thứ tự đọc, required/optional và output directory;
+- `core/manifest/` load contract và chặn duplicate/path escape/absolute path;
+- `core/conformance/` kết hợp manifest plan với Phase 1 record validation, state/profile/evidence checks;
+- `core/projection/` render Markdown thuần và chỉ ghi generated output an toàn;
+- `09-prompts/GOAL_PROMPT.md` và review prompt là thin orchestrators, policy vẫn nằm trong rules/quality;
+- `docs/PHASE2_MIGRATION_GUIDE.md` mô tả adoption từ numbered Markdown overlay.
+
+Canonical dependency flow hiện tại là `contracts -> manifest -> conformance -> projections`, trong khi prompts chỉ consume các boundary này. Legacy `00-*` đến `10-*` vẫn được giữ làm compatibility overlay; projection writer không sửa chúng.

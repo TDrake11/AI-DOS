@@ -26,6 +26,10 @@ Dependency ở đây là dependency về context và contract giữa các module
 | M11 | Documentation | `README.md`, `docs/*` | Navigation, architecture, vision, dependency | M01–M10 |
 | M12 | Core Reference Implementation | `core/contracts/*`, `core/state/*`, `core/validation/*`, `core/validate.js` | Canonical contracts, transitions, validation | M01–M07 |
 | M13 | Core Tests | `test/*` | Executable contract/state/validation evidence | M12 |
+| M14 | Read-order Manifest | `core/manifest/*`, `read_order.manifest` | Literal read order, required paths, safe resolution | M11, M12 |
+| M15 | Conformance Boundary | `core/conformance/*`, `core/conformance.js` | Project validation, profile/evidence checks, active/blocked summary | M14, M12 |
+| M16 | Projection Boundary | `core/projection/*`, `core/project.js` | Deterministic Markdown views and safe generated output | M15, M12 |
+| M17 | Thin Prompt Orchestration | `09-prompts/*` | Agent entry points that reference canonical policy/tools | M02–M16 |
 
 ## 3. Dependency graph hiện tại
 
@@ -64,7 +68,7 @@ Có một coupling vòng tiềm ẩn cần xử lý: `01-goal/GOAL.md` dùng đi
 6. Ghi M06: evidence, risk, manual action, release/rollback khi cần
 7. Cập nhật M10: state canonical/projection
 8. Dùng M09 làm entry point và M11 làm navigation/context handoff
-9. Core M12 validate records/state before execution; M13 proves behavior without external services
+9. Core M12 validates records/state; M14 defines read order; M15 conforms the project; M16 generates views; M13 proves behavior without external services
 ```
 
 ## 5. Boundary và hướng phụ thuộc bắt buộc
@@ -105,11 +109,14 @@ Có một coupling vòng tiềm ẩn cần xử lý: `01-goal/GOAL.md` dùng đi
                   |                    |
                   +---------+----------+
                             v
-                    Project overlay
+             M14 Read-order Manifest
+                            |
+                            v
+             M15 Conformance Boundary
                             |
               +-------------+-------------+
               v             v             v
-           Planning      Adapters       QA/CI
+       M16 Projections   M17 Prompts    Adapters/QA
               |             |             |
               +-------------+-------------+
                             v

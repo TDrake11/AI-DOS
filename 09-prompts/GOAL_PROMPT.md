@@ -1,73 +1,48 @@
 # `/goal` Prompt
 
-Dán nội dung sau cho Codex:
+Paste the following into an AI Coding Agent:
 
 ```text
-Read and obey the AI-DOS files in this repository.
+Work as an AI-DOS agent. Read repository policy and canonical project context
+before changing code.
 
-Start with:
-- README.md
-- 00-project/PROJECT_INFO.md
-- 00-project/ARCHITECTURE.md
-- 01-goal/GOAL.md
-- all files in 02-rules/
-- relevant files in 03-development/
-- all files in 04-quality/
-- 05-operations/MANUAL_ACTION_QUEUE.md
-- 06-roadmap/ROADMAP.md
-- all tasks in 07-tasks/
-- core/contracts/
-- core/state/
-- core/validation/
-- docs/COMPATIBILITY_MATRIX.md
-- docs/MIGRATION_GUIDE.md
+1. If `.ai-dos/manifest.json` exists, treat it as the authoritative read-order
+   manifest. Run:
 
-If canonical JSON records exist, validate the complete record set before implementation:
+   node core/conformance.js --manifest .ai-dos/manifest.json
 
-```text
-node core/validate.js <all-canonical-record-files>
-```
+   Read the manifest entries in declared order. Do not replace the manifest
+   with implicit globbing or an invented file order.
 
-Do not proceed while diagnostics report placeholders, duplicate IDs, unknown dependencies, dependency cycles, or task/state ID drift. The canonical lifecycle status is `project.state.taskStatuses`; task records are work definitions.
+2. If the manifest does not exist, follow `docs/PHASE2_MIGRATION_GUIDE.md`.
+   Read the legacy overlay only as bootstrap input, then identify the smallest
+   canonical record set and manifest needed for this project.
 
-Before implementation, inspect the real current code and update the architecture snapshot. Do not assume old documentation is accurate.
+3. Inspect the real source tree and current implementation. Do not trust stale
+   summaries, placeholders, generated projections, or conversation memory.
 
-Execute tasks in dependency order.
+4. Select executable tasks by dependency order and canonical
+   `project.state.taskStatuses`. Task records define work; they do not own
+   lifecycle status. Respect the project's explicit execution profile.
 
-For every task:
-1. Verify the current implementation.
-2. Implement only the confirmed gap.
-3. Run relevant lint, typecheck, build and tests.
-4. Fix failures.
-5. Update task status and evidence.
-6. Commit the task separately.
-7. Push the commit.
-8. Confirm deployment was triggered.
-9. Monitor deployment until success or until the configured timeout.
-10. Test the related flow on the production URL from PROJECT_INFO.md.
-11. If production fails, diagnose, fix, commit, push, redeploy and test again.
-12. Mark DONE only after the Definition of Done is satisfied.
+5. For each task: confirm scope and acceptance criteria, make the smallest
+   maintainable change, run relevant checks, record structured evidence, and
+   update canonical state. Use the rules, quality gates, security policy and
+   production policy as the source of truth; do not duplicate them in this
+   prompt.
 
-If a step requires a human-only secret, OAuth approval, DNS change, license, external account, inaccessible VPS permission, or design-tool access:
-- add a precise entry to 05-operations/MANUAL_ACTION_QUEUE.md,
-- mark only the affected task WAITING_MANUAL or PARTIAL,
-- continue every independent task,
-- periodically revisit USER_COMPLETED or RETEST_REQUIRED entries.
+6. Human-only blockers go to
+   `05-operations/MANUAL_ACTION_QUEUE.md`. Mark only affected work blocked and
+   continue independent tasks.
 
-You may install and use trustworthy MCP servers, plugins or tools when necessary and permitted by the environment. Record installed tools in CHANGELOG.md. Never expose or commit secrets.
+7. Before declaring completion, run conformance again and generate safe views:
 
-For UI/UX work, use the design tool configured in PROJECT_INFO.md when helpful. Create a detailed design prompt, review the generated result, adapt it to the existing stack and design system, and preserve business logic and APIs. If the tool cannot be accessed, continue with the existing design system and add a Manual Action only when human access is truly necessary.
+   node core/conformance.js --manifest .ai-dos/manifest.json
+   node core/project.js --manifest .ai-dos/manifest.json --out .ai-dos/generated
 
-Do not stop until:
-- all tasks are DONE, or
-- every remaining task is blocked only by documented human actions and no independent work remains.
+   Treat generated Markdown as a view, never as a second source of truth.
 
-At completion, update:
-- project state,
-- changelog,
-- release checklist,
-- risk register,
-- technical debt,
-- QA/UAT results,
-- manual action summary.
+8. Review the diff, tests, evidence, state and remaining risks. Commit focused
+   changes using the repository Git policy. Stop only when the goal is complete
+   or all remaining work is explicitly blocked by documented human action.
 ```
