@@ -151,7 +151,7 @@ test('rejects unknown contract kinds without throwing', () => {
 test('CLI validates JSON records with a reproducible exit code', () => {
   const valid = spawnSync(process.execPath, [
     'core/validate.js',
-    'test/fixtures/valid-project.json',
+    'test/fixtures/valid-project-records.json',
   ], { encoding: 'utf8' });
   const invalid = spawnSync(process.execPath, [
     'core/validate.js',

@@ -155,6 +155,7 @@ Prompt là interface tiện dụng cho agent; policy canonical vẫn nằm ở c
 | `PHASE1_CORE_SPEC.md` | Phase 1 contract foundation spec |
 | `COMPATIBILITY_MATRIX.md` | Reader policy và legacy mapping |
 | `MIGRATION_GUIDE.md` | Manual migration procedure |
+| `handoffs/phase1-core.md` | Technical handoff for the Phase 1 implementation |
 
 ### `core` — Phase 1 reference implementation
 

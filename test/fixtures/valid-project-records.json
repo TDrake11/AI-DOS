@@ -1,0 +1,48 @@
+[
+  {
+    "kind": "project.profile",
+    "schemaVersion": "1.0",
+    "id": "PROJECT:AI_DOS",
+    "name": "AI-DOS",
+    "repositoryType": "SINGLE_REPO",
+    "primaryBranch": "main",
+    "targetVersion": "1.0.0",
+    "capabilities": {
+      "deployment": "NOT_APPLICABLE",
+      "productionVerification": "NOT_APPLICABLE"
+    }
+  },
+  {
+    "kind": "task",
+    "schemaVersion": "1.0",
+    "id": "TASK:CONTRACTS",
+    "title": "Define contracts",
+    "category": "Core",
+    "priority": "HIGH",
+    "objective": "Define machine-readable contracts.",
+    "dependencies": [],
+    "acceptanceCriteria": ["Schemas are available."],
+    "verification": ["node --test"],
+    "applicability": {
+      "tests": "REQUIRED",
+      "deployment": "NOT_APPLICABLE",
+      "productionVerification": "NOT_APPLICABLE"
+    }
+  },
+  {
+    "kind": "project.state",
+    "schemaVersion": "1.0",
+    "id": "STATE:PROJECT_AI_DOS",
+    "projectId": "PROJECT:AI_DOS",
+    "aiDosVersion": "1.0.0",
+    "status": "NOT_STARTED",
+    "currentSprintId": null,
+    "currentTaskId": null,
+    "taskStatuses": {
+      "TASK:CONTRACTS": "TODO"
+    },
+    "waitingManualActionIds": [],
+    "lastEvidenceId": null,
+    "updatedAt": "2026-08-05T12:00:00.000Z"
+  }
+]
