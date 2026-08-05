@@ -94,3 +94,12 @@ test('rejects absolute paths and duplicate normalized paths', () => {
   assert.ok(result.diagnostics.some(({ code }) => code === 'DUPLICATE_MANIFEST_PATH'));
   assert.ok(result.diagnostics.some(({ code }) => code === 'ABSOLUTE_PATH'));
 });
+
+test('rejects unsafe generated directories declared by the manifest', () => {
+  for (const outputDirectory of ['../outside', '10-state']) {
+    const result = buildReadPlan({ ...manifest, outputDirectory }, fixtureRoot);
+
+    assert.equal(result.ok, false);
+    assert.ok(result.diagnostics.some(({ code }) => code === 'OUTPUT_DIRECTORY_UNSAFE'));
+  }
+});

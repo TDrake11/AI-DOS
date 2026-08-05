@@ -3,6 +3,11 @@ import { isAbsolute, relative, resolve } from 'node:path';
 
 import { validateRecord } from '../validation/index.js';
 
+const LEGACY_ROOTS = new Set([
+  '00-project', '01-goal', '02-rules', '03-development', '04-quality',
+  '05-operations', '06-roadmap', '07-tasks', '08-qa', '09-prompts', '10-state',
+]);
+
 function diagnostic(code, path, details = {}, severity = 'error') {
   return { code, path, severity, ...details };
 }
@@ -13,6 +18,18 @@ function isOutsideRoot(root, target) {
     || relativePath.startsWith('..\\')
     || relativePath.startsWith('../')
     || isAbsolute(relativePath);
+}
+
+function isLegacyRoot(root, target) {
+  const relativePath = relative(root, target);
+  return LEGACY_ROOTS.has(relativePath.split(/[\\/]/)[0]);
+}
+
+export function isSafeGeneratedPath(projectRoot, outputPath) {
+  if (typeof outputPath !== 'string' || outputPath.length === 0) return false;
+  const root = resolve(projectRoot);
+  const target = isAbsolute(outputPath) ? resolve(outputPath) : resolve(root, outputPath);
+  return target !== root && !isOutsideRoot(root, target) && !isLegacyRoot(root, target);
 }
 
 export function loadManifest(manifestPath) {
@@ -45,6 +62,12 @@ export function buildReadPlan(manifest, projectRoot) {
   const seenIds = new Set();
   const seenPaths = new Set();
 
+  if (isAbsolute(manifest.outputDirectory) || !isSafeGeneratedPath(root, manifest.outputDirectory)) {
+    diagnostics.push(diagnostic('OUTPUT_DIRECTORY_UNSAFE', '$.outputDirectory', {
+      value: manifest.outputDirectory,
+    }));
+  }
+
   manifest.entries.forEach((entry, index) => {
     const entryPath = `$.entries[${index}]`;
     const absolutePath = resolve(root, entry.path);
@@ -59,10 +82,11 @@ export function buildReadPlan(manifest, projectRoot) {
       return;
     }
 
-    if (seenPaths.has(absolutePath)) {
+    const pathKey = process.platform === 'win32' ? absolutePath.toLowerCase() : absolutePath;
+    if (seenPaths.has(pathKey)) {
       diagnostics.push(diagnostic('DUPLICATE_MANIFEST_PATH', `${entryPath}.path`, { value: entry.path }));
     }
-    seenPaths.add(absolutePath);
+    seenPaths.add(pathKey);
 
     if (isOutsideRoot(root, absolutePath)) {
       diagnostics.push(diagnostic('PATH_ESCAPE', `${entryPath}.path`, { value: entry.path }));

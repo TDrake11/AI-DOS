@@ -42,7 +42,7 @@ The Phase 1 implementation is additive. Existing numbered directories, Markdown 
 node core/validate.js <record.json> [more-records.json]
 ```
 
-`10-state/TASK_STATUS.md` is treated as a human-readable legacy view, not an independent source of truth, once a canonical `project.state` record exists. Projection generation is intentionally deferred to Phase 2.
+`10-state/TASK_STATUS.md` is treated as a human-readable legacy view, not an independent source of truth, once a canonical `project.state` record exists. Phase 2 projection generation writes only to the configured generated output directory and never overwrites `10-state`.
 
 `task` records are definitions. Their lifecycle status is deliberately not duplicated there; `project.state.taskStatuses` is the canonical status map and must contain exactly the active task IDs when the complete project record set is validated.
 

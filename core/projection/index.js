@@ -1,19 +1,7 @@
 import { existsSync, mkdirSync, realpathSync, writeFileSync } from 'node:fs';
-import { isAbsolute, relative, resolve, join } from 'node:path';
+import { resolve, join } from 'node:path';
 
-const LEGACY_ROOTS = new Set([
-  '00-project',
-  '01-goal',
-  '02-rules',
-  '03-development',
-  '04-quality',
-  '05-operations',
-  '06-roadmap',
-  '07-tasks',
-  '08-qa',
-  '09-prompts',
-  '10-state',
-]);
+import { isSafeGeneratedPath } from '../manifest/index.js';
 
 function cell(value) {
   return String(value ?? '—').replaceAll('|', '\\|').replaceAll(/\r?\n/g, '<br>');
@@ -87,22 +75,8 @@ export function renderEvidenceSummary(records) {
   return lines.join('\n');
 }
 
-function isInside(root, target) {
-  const relativePath = relative(root, target);
-  return relativePath !== '..'
-    && !relativePath.startsWith('..\\')
-    && !relativePath.startsWith('../')
-    && !isAbsolute(relativePath);
-}
-
-function isLegacyOutput(root, target) {
-  const relativePath = relative(root, target);
-  const firstSegment = relativePath.split(/[\\/]/)[0];
-  return LEGACY_ROOTS.has(firstSegment);
-}
-
 function unsafeOutput(root, output) {
-  return output === root || !isInside(root, output) || isLegacyOutput(root, output);
+  return !isSafeGeneratedPath(root, output);
 }
 
 function outputDiagnostic(message, output) {

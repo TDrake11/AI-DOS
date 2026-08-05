@@ -74,4 +74,4 @@ Agent phải đọc code thực tế và ghi:
 
 ## Codex Prompt
 
-Read the project information, execution rules, architecture, roadmap and this task. Verify the current implementation in code before editing. Implement only the confirmed gap. Run relevant tests, commit, push, monitor deployment and verify production. If blocked by human-only configuration, add a precise Manual Action entry and continue independent tasks.
+Read the project manifest and applicable rules, then verify the current implementation in code before editing. Implement only the confirmed gap. Run checks selected by the execution profile, record structured evidence, update canonical state, and follow Git policy. Deploy or verify production only when applicability requires it. If blocked by human-only configuration, add a precise Manual Action entry and continue independent tasks.

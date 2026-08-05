@@ -37,12 +37,16 @@ Agent phải chọn task không bị phụ thuộc thay vì dừng toàn bộ.
 
 ## Task completion evidence
 
-Mỗi task phải ghi:
+Mỗi task phải ghi trong canonical evidence khi check áp dụng:
 
 - commit SHA,
-- test commands,
-- deploy identifier hoặc evidence,
-- production URL/flow đã test,
+- checks có `kind`, `name`, `status` và command/artifact nếu có,
+- deploy identifier nếu deployment áp dụng,
+- production URL/flow nếu production verification áp dụng,
 - kết quả,
 - lỗi còn lại,
 - manual action liên quan.
+
+`production_required`, `deployment_optional` và `not_applicable` quyết định
+những phần nào là bắt buộc. Không suy diễn deployment hoặc production
+verification chỉ vì task có commit.

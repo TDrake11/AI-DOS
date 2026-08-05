@@ -34,6 +34,12 @@ Một task chỉ được `DONE` khi các mục áp dụng đều đạt:
 ## Delivery
 
 - [ ] Commit và push.
-- [ ] Deploy thành công hoặc có Manual Action hợp lệ.
-- [ ] Production flow được test.
+- [ ] Deployment check đạt khi execution profile/task applicability yêu cầu; nếu không áp dụng, ghi `NOT_APPLICABLE`.
+- [ ] Production flow được test khi production verification áp dụng; nếu không áp dụng, ghi `NOT_APPLICABLE`.
 - [ ] Task log và changelog cập nhật.
+
+## Canonical evidence
+
+- [ ] Evidence checks có `kind`, `name`, `status` và command/artifact/reference phù hợp.
+- [ ] `project.state.taskStatuses` là nguồn lifecycle duy nhất.
+- [ ] Generated Markdown chỉ là projection và đã được regenerate nếu project sử dụng.
