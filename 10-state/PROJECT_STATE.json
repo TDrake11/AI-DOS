@@ -1,0 +1,12 @@
+{
+  "ai_dos_version": "1.0.0",
+  "project_name": "<PROJECT_NAME>",
+  "target_version": "<VERSION>",
+  "status": "NOT_STARTED",
+  "current_sprint": null,
+  "current_task": null,
+  "completed_tasks": [],
+  "waiting_manual_tasks": [],
+  "last_verified_commit": null,
+  "last_production_verification": null
+}
