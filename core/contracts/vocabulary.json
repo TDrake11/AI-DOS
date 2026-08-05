@@ -43,5 +43,14 @@
     "SKIPPED",
     "NOT_APPLICABLE",
     "BLOCKED"
+  ],
+  "evidenceCheckKinds": [
+    "TEST",
+    "BUILD",
+    "LINT",
+    "DEPLOY",
+    "PRODUCTION",
+    "MANUAL",
+    "OTHER"
   ]
 }

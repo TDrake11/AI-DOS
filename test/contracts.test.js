@@ -6,6 +6,7 @@ import {
   CONTRACT_KINDS,
   CONTRACT_SCHEMA_VERSION,
   EVIDENCE_RESULTS,
+  EVIDENCE_CHECK_KINDS,
   MANUAL_ACTION_STATUSES,
   PROJECT_STATUSES,
   TASK_STATUSES,
@@ -56,6 +57,7 @@ test('vocabularies are explicit and stable', () => {
   assert.ok(MANUAL_ACTION_STATUSES.includes('RETEST_REQUIRED'));
   assert.deepEqual(PROJECT_STATUSES, ['NOT_STARTED', 'IN_PROGRESS', 'BLOCKED', 'COMPLETED', 'CANCELLED']);
   assert.deepEqual(EVIDENCE_RESULTS, ['PASS', 'FAIL', 'SKIPPED', 'NOT_APPLICABLE', 'BLOCKED']);
+  assert.deepEqual(EVIDENCE_CHECK_KINDS, ['TEST', 'BUILD', 'LINT', 'DEPLOY', 'PRODUCTION', 'MANUAL', 'OTHER']);
 });
 
 test('unknown contract kinds fail explicitly', () => {

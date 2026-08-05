@@ -21,6 +21,7 @@ export const TASK_STATUSES = Object.freeze([...vocabulary.taskStatuses]);
 export const MANUAL_ACTION_STATUSES = Object.freeze([...vocabulary.manualActionStatuses]);
 export const PROJECT_STATUSES = Object.freeze([...vocabulary.projectStatuses]);
 export const EVIDENCE_RESULTS = Object.freeze([...vocabulary.evidenceResults]);
+export const EVIDENCE_CHECK_KINDS = Object.freeze([...vocabulary.evidenceCheckKinds]);
 export const COMPATIBILITY_MATRIX = deepFreeze(compatibility);
 
 export function getSchema(kind) {

@@ -16,6 +16,7 @@
         "repositoryType": { "enum": ["SINGLE_REPO", "MONOREPO", "MULTI_REPO"] },
         "primaryBranch": { "type": "string", "minLength": 1 },
         "targetVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+        "executionProfile": { "enum": ["production_required", "deployment_optional", "not_applicable"] },
         "capabilities": {
           "type": "object",
           "additionalProperties": false,
@@ -145,8 +146,9 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["name", "status"],
+            "required": ["kind", "name", "status"],
             "properties": {
+              "kind": { "enum": ["TEST", "BUILD", "LINT", "DEPLOY", "PRODUCTION", "MANUAL", "OTHER"] },
               "name": { "type": "string", "minLength": 1 },
               "command": { "type": "string" },
               "status": { "enum": ["PASS", "FAIL", "SKIPPED", "NOT_APPLICABLE", "BLOCKED"] }
