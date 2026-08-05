@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-dos.dev/schemas/contract-schemas.json",
+  "schemas": {
+    "project.profile": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ai-dos.dev/schemas/project.profile.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "schemaVersion", "id", "name", "repositoryType", "primaryBranch", "targetVersion", "capabilities"],
+      "properties": {
+        "kind": { "const": "project.profile" },
+        "schemaVersion": { "const": "1.0" },
+        "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9:_-]{2,63}$" },
+        "name": { "type": "string", "minLength": 1 },
+        "repositoryType": { "enum": ["SINGLE_REPO", "MONOREPO", "MULTI_REPO"] },
+        "primaryBranch": { "type": "string", "minLength": 1 },
+        "targetVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+        "capabilities": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["deployment", "productionVerification"],
+          "properties": {
+            "deployment": { "enum": ["REQUIRED", "OPTIONAL", "NOT_APPLICABLE"] },
+            "productionVerification": { "enum": ["REQUIRED", "OPTIONAL", "NOT_APPLICABLE"] }
+          }
+        },
+        "extensions": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "roadmap": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ai-dos.dev/schemas/roadmap.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "schemaVersion", "id", "version", "objective", "scope", "sprintIds", "releaseCriteria", "status"],
+      "properties": {
+        "kind": { "const": "roadmap" },
+        "schemaVersion": { "const": "1.0" },
+        "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9:_-]{2,63}$" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+        "objective": { "type": "string", "minLength": 1 },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["inScope", "outOfScope"],
+          "properties": {
+            "inScope": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "outOfScope": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+          }
+        },
+        "sprintIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "releaseCriteria": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "status": { "enum": ["DRAFT", "ACTIVE", "COMPLETED", "CANCELLED"] },
+        "extensions": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "sprint": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ai-dos.dev/schemas/sprint.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "schemaVersion", "id", "name", "goal", "entryCriteria", "taskIds", "exitCriteria", "status"],
+      "properties": {
+        "kind": { "const": "sprint" },
+        "schemaVersion": { "const": "1.0" },
+        "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9:_-]{2,63}$" },
+        "name": { "type": "string", "minLength": 1 },
+        "goal": { "type": "string", "minLength": 1 },
+        "entryCriteria": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "taskIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "dependencies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "exitCriteria": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "status": { "enum": ["PLANNED", "IN_PROGRESS", "COMPLETED", "CANCELLED"] },
+        "extensions": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "task": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ai-dos.dev/schemas/task.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "schemaVersion", "id", "title", "category", "priority", "objective", "status", "dependencies", "acceptanceCriteria", "verification", "applicability"],
+      "properties": {
+        "kind": { "const": "task" },
+        "schemaVersion": { "const": "1.0" },
+        "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9:_-]{2,63}$" },
+        "title": { "type": "string", "minLength": 1 },
+        "category": { "type": "string", "minLength": 1 },
+        "priority": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "objective": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["TODO", "IN_PROGRESS", "WAITING_MANUAL", "BLOCKED_DEPENDENCY", "PARTIAL", "READY_FOR_DEPLOY", "DEPLOYING", "VERIFYING_PRODUCTION", "DONE", "FAILED"] },
+        "dependencies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "blocks": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "acceptanceCriteria": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "verification": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "applicability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tests", "deployment", "productionVerification"],
+          "properties": {
+            "tests": { "enum": ["REQUIRED", "OPTIONAL", "NOT_APPLICABLE"] },
+            "deployment": { "enum": ["REQUIRED", "OPTIONAL", "NOT_APPLICABLE"] },
+            "productionVerification": { "enum": ["REQUIRED", "OPTIONAL", "NOT_APPLICABLE"] }
+          }
+        },
+        "extensions": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "manual_action": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ai-dos.dev/schemas/manual_action.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "schemaVersion", "id", "title", "status", "priority", "requiredAction", "reason", "retestSteps", "expectedResult"],
+      "properties": {
+        "kind": { "const": "manual_action" },
+        "schemaVersion": { "const": "1.0" },
+        "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9:_-]{2,63}$" },
+        "title": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["WAITING_USER", "USER_COMPLETED", "RETEST_REQUIRED", "VERIFIED", "CANCELLED"] },
+        "priority": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "requiredAction": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "retestSteps": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "expectedResult": { "type": "string", "minLength": 1 },
+        "relatedTaskIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "blocks": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "extensions": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "evidence": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ai-dos.dev/schemas/evidence.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "schemaVersion", "id", "taskId", "checks", "result", "recordedAt"],
+      "properties": {
+        "kind": { "const": "evidence" },
+        "schemaVersion": { "const": "1.0" },
+        "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9:_-]{2,63}$" },
+        "taskId": { "type": "string", "minLength": 1 },
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "status"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "command": { "type": "string" },
+              "status": { "enum": ["PASS", "FAIL", "SKIPPED", "NOT_APPLICABLE", "BLOCKED"] }
+            }
+          }
+        },
+        "result": { "enum": ["PASS", "FAIL", "SKIPPED", "NOT_APPLICABLE", "BLOCKED"] },
+        "recordedAt": { "type": "string", "format": "date-time" },
+        "commit": { "type": "string" },
+        "notes": { "type": "string" },
+        "extensions": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "project.state": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ai-dos.dev/schemas/project.state.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "schemaVersion", "id", "projectId", "aiDosVersion", "status", "taskStatuses", "updatedAt"],
+      "properties": {
+        "kind": { "const": "project.state" },
+        "schemaVersion": { "const": "1.0" },
+        "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9:_-]{2,63}$" },
+        "projectId": { "type": "string", "minLength": 1 },
+        "aiDosVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+        "status": { "enum": ["NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETED", "CANCELLED"] },
+        "currentSprintId": { "type": ["string", "null"] },
+        "currentTaskId": { "type": ["string", "null"] },
+        "taskStatuses": {
+          "type": "object",
+          "additionalProperties": { "enum": ["TODO", "IN_PROGRESS", "WAITING_MANUAL", "BLOCKED_DEPENDENCY", "PARTIAL", "READY_FOR_DEPLOY", "DEPLOYING", "VERIFYING_PRODUCTION", "DONE", "FAILED"] }
+        },
+        "waitingManualActionIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "lastEvidenceId": { "type": ["string", "null"] },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "extensions": { "type": "object", "additionalProperties": true }
+      }
+    }
+  }
+}
