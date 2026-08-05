@@ -1,0 +1,13 @@
+{
+  "kind": "project.profile",
+  "schemaVersion": "1.0",
+  "id": "PROJECT:AI_DOS",
+  "name": "AI-DOS",
+  "repositoryType": "SINGLE_REPO",
+  "primaryBranch": "main",
+  "targetVersion": "1.0.0",
+  "capabilities": {
+    "deployment": "NOT_APPLICABLE",
+    "productionVerification": "NOT_APPLICABLE"
+  }
+}

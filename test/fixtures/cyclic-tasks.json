@@ -1,0 +1,38 @@
+[
+  {
+    "kind": "task",
+    "schemaVersion": "1.0",
+    "id": "TASK:A",
+    "title": "Task A",
+    "category": "Core",
+    "priority": "HIGH",
+    "objective": "A",
+    "status": "TODO",
+    "dependencies": ["TASK:B"],
+    "acceptanceCriteria": ["A is complete."],
+    "verification": ["node --test"],
+    "applicability": {
+      "tests": "REQUIRED",
+      "deployment": "NOT_APPLICABLE",
+      "productionVerification": "NOT_APPLICABLE"
+    }
+  },
+  {
+    "kind": "task",
+    "schemaVersion": "1.0",
+    "id": "TASK:B",
+    "title": "Task B",
+    "category": "Core",
+    "priority": "HIGH",
+    "objective": "B",
+    "status": "TODO",
+    "dependencies": ["TASK:A"],
+    "acceptanceCriteria": ["B is complete."],
+    "verification": ["node --test"],
+    "applicability": {
+      "tests": "REQUIRED",
+      "deployment": "NOT_APPLICABLE",
+      "productionVerification": "NOT_APPLICABLE"
+    }
+  }
+]
