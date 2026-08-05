@@ -144,6 +144,16 @@ Prompt là interface tiện dụng cho agent; policy canonical vẫn nằm ở c
 | `PROJECT_STATE.json` | Machine-readable current project state | State projection |
 | `TASK_STATUS.md` | Human-readable task summary | State projection |
 
+### `core` — Phase 1 reference implementation
+
+| Path | Vai trò | Tính chất |
+|---|---|---|
+| `core/contracts/` | Schemas, vocabulary, compatibility matrix | Canonical contract |
+| `core/state/` | Pure state factory và transition model | Core behavior |
+| `core/validation/` | Schema subset, placeholder và graph checks | Core behavior |
+| `core/validate.js` | Reproducible JSON validation entry point | CLI boundary |
+| `test/` | Node built-in contract/state/validation tests | Conformance evidence |
+
 ## 4. Project replacement contract
 
 Mục tiêu user-facing là project mới có thể thay:
@@ -174,3 +184,9 @@ Tuy nhiên để contract này đúng trong thực tế, các file sau phải đ
 | New project | `00-project`, `06-roadmap`, `07-tasks`, `05-operations`, `08-qa`, `10-state` |
 | New tool/adapter | `03-development/MCP_PLUGIN_POLICY.md`, operations changelog, capability/evidence contract |
 | Version change | README, state, changelog, migration/compatibility docs |
+
+Phase 1 design and compatibility references:
+
+- `docs/PHASE1_CORE_SPEC.md`
+- `docs/COMPATIBILITY_MATRIX.md`
+- `docs/MIGRATION_GUIDE.md`

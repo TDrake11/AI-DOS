@@ -1,0 +1,60 @@
+{
+  "frameworkVersion": "1.0.0",
+  "contractVersion": "1.0",
+  "readerPolicy": {
+    "sameMajor": "ACCEPT",
+    "newerMinor": "ACCEPT_IF_UNKNOWN_FIELDS_ARE_IN_EXTENSIONS",
+    "newerMajor": "REJECT_WITH_MIGRATION_REQUIRED",
+    "unknownKind": "REJECT",
+    "unknownSchemaVersion": "REJECT"
+  },
+  "records": {
+    "project.profile": {
+      "status": "SUPPORTED",
+      "legacySources": ["00-project/PROJECT_INFO.md", "00-project/TECH_STACK.md"],
+      "migration": "Create one profile record and move project-specific values into typed fields or extensions."
+    },
+    "roadmap": {
+      "status": "SUPPORTED",
+      "legacySources": ["06-roadmap/ROADMAP.md"],
+      "migration": "Create one roadmap record; map sprint rows to sprint IDs and preserve release criteria."
+    },
+    "sprint": {
+      "status": "SUPPORTED",
+      "legacySources": ["07-tasks/**/README.md"],
+      "migration": "Create one sprint record per active sprint and exclude example directories from execution."
+    },
+    "task": {
+      "status": "SUPPORTED",
+      "legacySources": ["07-tasks/**/SPR*.md"],
+      "migration": "Create one task record per active task; preserve a stable ID and normalize status/dependencies."
+    },
+    "manual_action": {
+      "status": "SUPPORTED",
+      "legacySources": ["05-operations/MANUAL_ACTION_QUEUE.md"],
+      "migration": "Create one record per Manual Action and never copy secret values into the record."
+    },
+    "evidence": {
+      "status": "SUPPORTED",
+      "legacySources": ["07-tasks/**/SPR*.md", "08-qa/*", "05-operations/CHANGELOG.md"],
+      "migration": "Extract verification commands, result, commit and production evidence when present."
+    },
+    "project.state": {
+      "status": "SUPPORTED",
+      "legacySources": ["10-state/PROJECT_STATE.json", "10-state/TASK_STATUS.md"],
+      "migration": "Create canonical state from task records; keep TASK_STATUS.md as a human-readable legacy view until projection exists."
+    }
+  },
+  "legacyStatusPolicy": {
+    "TODO": "TODO",
+    "IN_PROGRESS": "IN_PROGRESS",
+    "WAITING_MANUAL": "WAITING_MANUAL",
+    "BLOCKED_DEPENDENCY": "BLOCKED_DEPENDENCY",
+    "PARTIAL": "PARTIAL",
+    "READY_FOR_DEPLOY": "READY_FOR_DEPLOY",
+    "DEPLOYING": "DEPLOYING",
+    "VERIFYING_PRODUCTION": "VERIFYING_PRODUCTION",
+    "DONE": "DONE",
+    "FAILED": "FAILED"
+  }
+}
